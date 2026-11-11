@@ -1,0 +1,17 @@
+# Ignore PDFs in the repository root only (PDFs in subfolders like docs/ are still tracked)
+/*.pdf
+/*.drawio
+
+# Qt / qmake build output and per-machine Qt Creator settings
+# (D1 p.5: the zip must not contain a build folder, object files or executables)
+build/
+build-*/
+*.pro.user
+*.pro.user.*
+.qmake.stash
+Makefile*
+*.o
+moc_*
+ui_*.h
+qrc_*.cpp
+/DragonEndPOS
