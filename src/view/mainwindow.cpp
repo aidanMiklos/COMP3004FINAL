@@ -11,13 +11,13 @@
  */
 
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 #include "dashboardview.h"
 #include "loginview.h"
 #include "makeorderview.h"
 #include "menuview.h"
 #include "orderqueueview.h"
-#include "qstackedwidget.h"
 #include <QStackedWidget>
 
 MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
@@ -29,17 +29,21 @@ MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
       menuView(new MenuView(menu, this)),
       makeOrderView(new MakeOrderView(orders, menu, this)),
       dashboardView(new DashboardView(dashboard, this)),
-      orderQueueView(new OrderQueueView(kitchen, this))
+      orderQueueView(new OrderQueueView(kitchen, this)),
+      ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
     setWindowTitle("DragonEndPOS");
     // TODO: stack the pages, add the header label, the role menus and File > Log out.
-    QStackedWidget *stackedWidget = new QStackedWidget;
-    stackedWidget->addWidget(this->loginView);
-    stackedWidget->addWidget(this->menuView);
-    stackedWidget->addWidget(this->makeOrderView);
-    stackedWidget->addWidget(this->dashboardView);
-    stackedWidget->addWidget(this->orderQueueView);
-    
-    setCentralWidget(stackedWidget);
+
+    widgetStack = ui->stackedWidget;
+
+    widgetStack->addWidget(loginView);
+    widgetStack->addWidget(dashboardView);
+    widgetStack->addWidget(makeOrderView);
+    widgetStack->addWidget(orderQueueView);
+    widgetStack->addWidget(menuView);
+
+    widgetStack->setCurrentWidget(dashboardView);
 
 }

@@ -7,9 +7,11 @@
  */
 
 #include "dashboardview.h"
+#include "ui_dashboardview.h"
 
 DashboardView::DashboardView(DashboardController *controller, QWidget *parent)
-    : QWidget(parent), controller(controller)
+    : QWidget(parent), controller(controller), ui(new Ui::DashboardView)
 {
     // TODO: account panel, current-order panel, history table.
+    ui->setupUi(this);
 }

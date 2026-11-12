@@ -20,6 +20,10 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class MakeOrderView; }
+QT_END_NAMESPACE
+
 class OrderController;
 class MenuController;
 class MenuView;
@@ -34,6 +38,8 @@ public:
 private:
     OrderController *controller;   // Figure 1: MakeOrderView -> OrderController
     MenuView *menuView;       // Figure 1: MakeOrderView -> MenuView (embedded)
+
+    Ui::MakeOrderView *ui;
 };
 
 #endif // MAKEORDERVIEW_H

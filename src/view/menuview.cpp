@@ -7,9 +7,11 @@
  */
 
 #include "menuview.h"
+#include "ui_menuview.h"
 
 MenuView::MenuView(MenuController *controller, QWidget *parent)
-    : QWidget(parent), controller(controller)
+    : QWidget(parent), controller(controller), ui(new Ui::MenuView)
 {
+       ui->setupUi(this);
     // TODO: category tree or list.
 }
