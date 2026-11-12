@@ -38,8 +38,8 @@ public:
 private:
     User *currentUser() const;
 
-    CafeDataStore &store;   // Figure 1: AccountController -> CafeDataStore
-    QString m_currentUsername;   // empty when nobody is logged in
+    CafeDataStore &store;
+    QString m_currentUsername;
 };
 
 #endif // ACCOUNTCONTROLLER_H
