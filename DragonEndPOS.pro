@@ -80,3 +80,8 @@ HEADERS += \
     src/view/menuview.h \
     src/view/orderdetailsview.h \
     src/view/orderqueueview.h
+
+FORMS += \
+    src/view/dashboardview.ui \
+    src/view/loginview.ui \
+    src/view/mainwindow.ui

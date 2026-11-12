@@ -8,9 +8,11 @@
  */
 
 #include "loginview.h"
+#include "ui_loginview.h"
 
 LoginView::LoginView(AccountController *controller, QWidget *parent)
-    : QWidget(parent), controller(controller)
+    : QWidget(parent), controller(controller), ui(new Ui::LoginView)
 {
     // TODO: name/username field, Enter button, error label.
+    ui->setupUi(this);
 }

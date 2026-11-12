@@ -26,6 +26,10 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class DashboardView; }
+QT_END_NAMESPACE
+
 class DashboardController;
 
 class DashboardView : public QWidget
@@ -37,6 +41,8 @@ public:
 
 private:
     DashboardController *controller;   // Figure 1: DashboardView -> DashboardController
+
+    Ui::DashboardView *ui;
 };
 
 #endif // DASHBOARDVIEW_H
