@@ -28,8 +28,13 @@ class Customer : public User
 {
 public:
     Customer();
+    ~Customer() override;
+
+    Customer(const Customer &) = delete;
+    Customer &operator=(const Customer &) = delete;
 
 private:
+    // A customer owns all of its orders; OrderQueue only points to them.
     Order *currentOrder = nullptr;   // Figure 1: Customer -- Order (at most one)
     QList<Order *> history;          // Figure 1: Customer -- Order (last 5)
 };

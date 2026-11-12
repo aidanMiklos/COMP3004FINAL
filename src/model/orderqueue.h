@@ -26,7 +26,7 @@ public:
     OrderQueue();
 
 private:
-    QList<Order *> orders;   // Figure 1: OrderQueue -> Order (oldest first)
+    QList<Order *> orders;   // Figure 1: OrderQueue -> Order (oldest first, not owned)
 };
 
 #endif // ORDERQUEUE_H

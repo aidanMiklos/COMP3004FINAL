@@ -29,10 +29,14 @@ class Order
 {
 public:
     Order();
+    ~Order();
+
+    Order(const Order &) = delete;
+    Order &operator=(const Order &) = delete;
 
 private:
     Customer *customer = nullptr;   // Figure 1: Customer -- Order (queue shows the name)
-    QList<OrderItem *> items;       // Figure 1: Order -> OrderItem
+    QList<OrderItem *> items;       // Figure 1: Order -> OrderItem (owned)
 };
 
 #endif // ORDER_H

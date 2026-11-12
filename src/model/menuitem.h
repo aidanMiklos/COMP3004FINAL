@@ -26,9 +26,13 @@ class MenuItem
 {
 public:
     MenuItem();
+    ~MenuItem();
+
+    MenuItem(const MenuItem &) = delete;
+    MenuItem &operator=(const MenuItem &) = delete;
 
 private:
-    QList<RecipeIngredient *> recipe;   // Figure 1: MenuItem -> RecipeIngredient
+    QList<RecipeIngredient *> recipe;   // Figure 1: MenuItem -> RecipeIngredient (owned)
 };
 
 #endif // MENUITEM_H

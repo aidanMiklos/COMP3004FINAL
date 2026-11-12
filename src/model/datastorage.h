@@ -22,11 +22,13 @@ public:
     virtual ~DataStorage() = default;
 
     // TODO: pure virtual methods every storage must provide, e.g.
-    //   virtual User *findUser(const QString &nameOrUsername) = 0;
-    //   virtual QList<MenuItem *> menuItems() const = 0;
-    //   virtual OrderQueue &orderQueue() = 0;
-    //   virtual void addUser(User *user) = 0;           // used by DefaultDataLoader
-    //   virtual void addMenuItem(MenuItem *item) = 0;   // used by DefaultDataLoader
+    // (needs forward declarations and an InMemoryStorage implementation first)
+    // virtual User *findUser(const QString &nameOrUsername) = 0;
+    // virtual QList<MenuItem *> menuItems() const = 0;
+    // virtual OrderQueue &orderQueue() = 0;
+    // virtual void addUser(User *user) = 0;           // used by DefaultDataLoader
+    // virtual void addMenuItem(MenuItem *item) = 0;   // used by DefaultDataLoader
+    // virtual void addIngredient(Ingredient *ingredient) = 0;   // used by DefaultDataLoader
 };
 
 #endif // DATASTORAGE_H
