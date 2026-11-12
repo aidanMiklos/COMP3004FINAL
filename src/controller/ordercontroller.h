@@ -39,6 +39,7 @@ public:
 
 private:
     CafeDataStore &store;   // Figure 1: OrderController -> CafeDataStore
+    // Owned until submitted; then the Customer owns it and this goes back to nullptr.
     Order *draftOrder = nullptr;   // Figure 1: OrderController -> Order (order being built)
 };
 

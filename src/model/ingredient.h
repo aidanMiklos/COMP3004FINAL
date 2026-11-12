@@ -2,7 +2,7 @@
  * Ingredient -- Model subsystem (entity class)
  *
  * An ingredient itself (for example bread), shared by every recipe line that
- * uses it.
+ * uses it. Owned by InMemoryStorage.
  *
  * Spec notes:
  *   - Each menu item lists its ingredients with quantities. [D1 p.2 Default

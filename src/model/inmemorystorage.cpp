@@ -10,6 +10,7 @@
 
 #include <QtAlgorithms>
 
+#include "ingredient.h"
 #include "menuitem.h"
 #include "orderqueue.h"
 #include "user.h"
@@ -23,5 +24,6 @@ InMemoryStorage::~InMemoryStorage()
 {
     qDeleteAll(users);
     qDeleteAll(menu);
+    qDeleteAll(ingredients);
     delete kitchenQueue;
 }

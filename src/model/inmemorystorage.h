@@ -1,8 +1,8 @@
 /*
  * InMemoryStorage -- Model subsystem (Bridge implementation)
  *
- * The D1 implementation of DataStorage: keeps every user, menu item and the
- * order queue in lists in memory, and owns them.
+ * The D1 implementation of DataStorage: keeps every user, menu item,
+ * ingredient and the order queue in memory, and owns them.
  *
  * Spec notes:
  *   - Data objects are stored in memory. [D1 p.2 Default System Data]
@@ -19,6 +19,7 @@
 
 #include "datastorage.h"
 
+class Ingredient;
 class MenuItem;
 class OrderQueue;
 class User;
@@ -35,6 +36,7 @@ public:
 private:
     QList<User *> users;       // Figure 1: InMemoryStorage -> User
     QList<MenuItem *> menu;    // Figure 1: InMemoryStorage -> MenuItem
+    QList<Ingredient *> ingredients;   // Figure 1: InMemoryStorage -> Ingredient (shared by recipes)
     OrderQueue *kitchenQueue;  // Figure 1: InMemoryStorage -> OrderQueue
 };
 
