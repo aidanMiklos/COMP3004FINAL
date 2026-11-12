@@ -20,19 +20,26 @@
 #include <QString>
 
 class CafeDataStore;
+class User;
 
 class AccountController
 {
 public:
     AccountController();
 
-    // TODO: operations for the views. Pass the logged-in username in
-    //       (MainWindow gets it from AccountController) and return plain
-    //       data (QString, numbers), not model pointers.
+    bool identify(const QString &nameOrUsername);
+    void logout();
+    bool isLoggedIn() const;
+
+    QString currentUsername() const;
+    QString currentName() const;
+    QString currentRole() const;
 
 private:
+    User *currentUser() const;
+
     CafeDataStore &store;   // Figure 1: AccountController -> CafeDataStore
-    QString currentUsername;   // empty when nobody is logged in
+    QString m_currentUsername;   // empty when nobody is logged in
 };
 
 #endif // ACCOUNTCONTROLLER_H

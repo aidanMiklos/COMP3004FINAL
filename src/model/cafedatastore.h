@@ -20,7 +20,10 @@
 #ifndef CAFEDATASTORE_H
 #define CAFEDATASTORE_H
 
+#include <QString>
+
 class DataStorage;
+class User;
 
 class CafeDataStore
 {
@@ -30,8 +33,9 @@ public:
     CafeDataStore(const CafeDataStore &) = delete;
     CafeDataStore &operator=(const CafeDataStore &) = delete;
 
+    User *findUser(const QString &nameOrUsername) const;
+
     // TODO: facade methods that forward to storage, e.g.
-    //   User *findUser(const QString &nameOrUsername);
     //   QList<MenuItem *> menuItems() const;
     //   OrderQueue &orderQueue();
 
