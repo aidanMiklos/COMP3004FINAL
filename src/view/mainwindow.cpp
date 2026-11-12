@@ -40,6 +40,9 @@ MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
 
     widgetStack->addWidget(loginView);
     widgetStack->addWidget(dashboardView);
+    widgetStack->addWidget(makeOrderView);
+    widgetStack->addWidget(orderQueueView);
+    widgetStack->addWidget(menuView);
 
     widgetStack->setCurrentWidget(dashboardView);
 

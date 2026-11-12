@@ -17,6 +17,10 @@
 
 #include <QDialog>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class OrderDetailsView; }
+QT_END_NAMESPACE
+
 class KitchenController;
 
 class OrderDetailsView : public QDialog
@@ -28,6 +32,8 @@ public:
 
 private:
     KitchenController *controller;   // Figure 1: OrderDetailsView -> KitchenController
+
+    Ui::OrderDetailsView *ui;
 };
 
 #endif // ORDERDETAILSVIEW_H
