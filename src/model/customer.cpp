@@ -8,4 +8,14 @@
 
 #include "customer.h"
 
+#include <QtAlgorithms>
+
+#include "order.h"
+
 Customer::Customer() = default;
+
+Customer::~Customer()
+{
+    delete currentOrder;
+    qDeleteAll(history);
+}

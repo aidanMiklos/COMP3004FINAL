@@ -16,4 +16,13 @@
 
 #include "order.h"
 
+#include <QtAlgorithms>
+
+#include "orderitem.h"
+
 Order::Order() = default;
+
+Order::~Order()
+{
+    qDeleteAll(items);   // only the order lines; the MenuItems belong to the storage
+}
