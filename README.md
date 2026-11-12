@@ -2,7 +2,7 @@
 
 COMP 3004 Fall 2026 
 Team 57 
-Aidan Miklos, Kishaan Gidda, Henri Linkletter, Yiuxuan Han
+Aidan Miklos, Kishaan Gidda, Henri Linkletter, Yuxuan Han
 
 In-memory prototype of the Dragon's End Café Point of Sales System. Customers view the menu, place an online order and view their dashboard; kitchen staff view the order queue and complete orders. Written in C++ with Qt Widgets, built with qmake, and organised as Model-View-Controller (docs/D1-system-decomposition.pdf).
 
