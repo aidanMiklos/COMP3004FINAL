@@ -39,6 +39,17 @@ class DashboardView : public QWidget
 public:
     explicit DashboardView(DashboardController *controller, QWidget *parent = nullptr);
 
+// Used to notify the controller of stuff that has occurred
+signals:
+
+    // viewShown is a signal all widgets have, so all views will have one as well.
+    void viewShown();
+
+// Used to receive signals from the controller
+public slots:
+    void displayUsername(const QString &name);
+
+
 private:
     DashboardController *controller;   // Figure 1: DashboardView -> DashboardController
 

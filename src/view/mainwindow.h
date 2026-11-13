@@ -23,6 +23,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "viewtype.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -51,6 +52,12 @@ public:
                OrderController *orders, DashboardController *dashboard,
                KitchenController *kitchen, QWidget *parent = nullptr);
 
+// Used to notify the controller of stuff that has occurred
+signals:
+
+// Used to receive signals from the controller
+public slots:
+
 private:
     AccountController *accountController;   // Figure 1: MainWindow -> AccountController
 
@@ -65,6 +72,9 @@ private:
 
     Ui::MainWindow *ui;
 
+// Used to receive signals from this view's own widgets
+private slots:
+    void handleViewSwap(ViewType requestedType);
 };
 
 #endif // MAINWINDOW_H

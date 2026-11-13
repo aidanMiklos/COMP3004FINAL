@@ -188,9 +188,9 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="dashboardMenuBtn">
+         <widget class="QPushButton" name="dashboardOrderBtn">
           <property name="text">
-           <string>View Menu</string>
+           <string>Create Order</string>
           </property>
          </widget>
         </item>

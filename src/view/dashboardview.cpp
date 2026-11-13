@@ -15,3 +15,10 @@ DashboardView::DashboardView(DashboardController *controller, QWidget *parent)
     // TODO: account panel, current-order panel, history table.
     ui->setupUi(this);
 }
+
+void DashboardView::displayUsername(const QString &name)
+{
+
+    ui->dashboardMainLbl->setText("Welcome " + name);
+
+}
