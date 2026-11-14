@@ -49,6 +49,8 @@ public:
     ~OrderController();
 
     bool canPlaceOrder(const QString &username) const;
+    int availablePoints(const QString &username) const;
+    int availableCreditCents(const QString &username) const;
     bool startOrder(const QString &username);
     bool addItem(const QString &menuItemName, int quantity);
     void cancelOrder();

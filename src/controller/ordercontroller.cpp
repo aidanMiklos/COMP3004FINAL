@@ -58,6 +58,18 @@ bool OrderController::canPlaceOrder(const QString &username) const
     return customer && !hasOpenOrder(*customer);
 }
 
+int OrderController::availablePoints(const QString &username) const
+{
+    const Customer *customer = findCustomer(store, username);
+    return customer ? customer->loyaltyPoints() : 0;
+}
+
+int OrderController::availableCreditCents(const QString &username) const
+{
+    const Customer *customer = findCustomer(store, username);
+    return customer ? customer->creditCents() : 0;
+}
+
 bool OrderController::startOrder(const QString &username)
 {
     if (!canPlaceOrder(username))
