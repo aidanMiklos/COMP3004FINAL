@@ -22,25 +22,36 @@ LoginView::LoginView(AccountController *controller, QWidget *parent)
 
 // ----------------- PUBLIC SLOTS -----------------
 
-void LoginView::errorSignInUnsuccessful(const QString &message)
-{
-    // If there is an error with sign-in, we display the error message to the user
-    ui->loginWarningLbl->setText(message);
-}
+//void LoginView::errorSignInUnsuccessful(const QString &message)
+//{
+//    // If there is an error with sign-in, we display the error message to the user
+//    ui->loginWarningLbl->setText(message);
+//}
 
-void LoginView::signinSuccessful()
-{
-    // If a sign in is successful, we emit requestViewChange so the mainwindow will swap the view
-    emit requestViewChange(ViewType::DashboardView);
-}
+//*void LoginView::signinSuccessful()
+//{
+//    // If a sign in is successful, we emit requestViewChange so the mainwindow will swap the view
+//    emit requestViewChange(ViewType::DashboardView);
+//}*/
 
 // ----------------- PRIVATE SLOTS -----------------
 
 void LoginView::signinBtnClicked()
 {
-    // If the sign in button is clicked, we simply emit what the user has provided in the text box
-    emit userSignIn(ui->usernameInput->text());
-//    emit requestViewChange(ViewType::DashboardView);
+
+    // When the sign in button is clicked, we ask the AccountController if the specified username exists
+    // For now, we simply just check against my name
+    if (ui->usernameInput->text() == "Henri"){
+
+        emit requestViewChange(ViewType::DashboardView);
+
+    } else {
+
+        ui->loginWarningLbl->setText("The specified username was not found. Please try again.");
+        ui->usernameInput->setText("");
+
+    }
+
 }
 
 

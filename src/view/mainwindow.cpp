@@ -45,12 +45,13 @@ MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
     widgetStack->addWidget(orderQueueView);
     widgetStack->addWidget(menuView);
 
-    widgetStack->setCurrentWidget(loginView);
+    widgetStack->setCurrentWidget(dashboardView);
 
     // Connections
 
     // View Change Connections
     connect(loginView, &LoginView::requestViewChange, this, &MainWindow::handleViewSwap);
+    connect(dashboardView, &DashboardView::requestViewChange, this, &MainWindow::handleViewSwap);
 
 }
 
