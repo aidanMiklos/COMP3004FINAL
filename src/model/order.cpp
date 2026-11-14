@@ -77,6 +77,14 @@ void Order::setPlacedAt(const QDateTime &dateTime){
     m_placedAt = dateTime;
 }
 
+QString Order::customerUsername() const{
+    return m_customerUsername;
+}
+
+void Order::setCustomerUsername(const QString &username){
+    m_customerUsername = username;
+}
+
 bool Order::calculatePayment(int points, int creditCents){
     int maxPoints = (subtotalCents() / 2) / 100;
     int pointsValue = points * 100;

@@ -26,6 +26,8 @@ public:
     void setPayment(int points, int creditCents, int chargedCents, int earned);
     QDateTime placedAt()const;
     void setPlacedAt(const QDateTime &dateTime);
+    QString customerUsername()const;
+    void setCustomerUsername(const QString &username);
     bool calculatePayment(int points, int creditCents);
 private:
     int m_orderId;
@@ -37,6 +39,7 @@ private:
     int m_amountChargedCents;
     int m_pointsEarned;
     QDateTime m_placedAt;
+    QString m_customerUsername;
 };
 
 #endif // ORDER_H
