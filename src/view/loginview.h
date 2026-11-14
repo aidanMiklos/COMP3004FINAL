@@ -18,6 +18,10 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class LoginView; }
+QT_END_NAMESPACE
+
 class AccountController;
 
 class LoginView : public QWidget
@@ -29,6 +33,8 @@ public:
 
 private:
     AccountController *controller;   // Figure 1: LoginView -> AccountController
+
+    Ui::LoginView *ui;
 };
 
 #endif // LOGINVIEW_H

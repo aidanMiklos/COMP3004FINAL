@@ -7,9 +7,12 @@
  */
 
 #include "orderdetailsview.h"
+#include "ui_orderdetailsview.h"
 
 OrderDetailsView::OrderDetailsView(KitchenController *controller, QWidget *parent)
-    : QDialog(parent), controller(controller)
+    : QDialog(parent), controller(controller),
+      ui(new Ui::OrderDetailsView)
 {
     // TODO: order header, items with ingredients, Mark Completed button.
+    ui->setupUi(this);
 }

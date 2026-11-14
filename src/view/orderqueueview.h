@@ -18,6 +18,10 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class OrderQueueView; }
+QT_END_NAMESPACE
+
 class KitchenController;
 class OrderDetailsView;
 
@@ -31,6 +35,8 @@ public:
 private:
     KitchenController *controller;   // Figure 1: OrderQueueView -> KitchenController
     OrderDetailsView *detailsDialog;   // Figure 1: OrderQueueView -> OrderDetailsView
+
+    Ui::OrderQueueView *ui;
 };
 
 #endif // ORDERQUEUEVIEW_H

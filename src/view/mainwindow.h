@@ -24,6 +24,10 @@
 
 #include <QMainWindow>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
 class AccountController;
 class DashboardController;
 class KitchenController;
@@ -35,6 +39,8 @@ class LoginView;
 class MakeOrderView;
 class MenuView;
 class OrderQueueView;
+
+class QStackedWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -48,12 +54,17 @@ public:
 private:
     AccountController *accountController;   // Figure 1: MainWindow -> AccountController
 
+    QStackedWidget *widgetStack;
+
     // Pages (Figure 1: MainWindow -> each page)
     LoginView *loginView;
     MenuView *menuView;
     MakeOrderView *makeOrderView;
     DashboardView *dashboardView;
     OrderQueueView *orderQueueView;
+
+    Ui::MainWindow *ui;
+
 };
 
 #endif // MAINWINDOW_H

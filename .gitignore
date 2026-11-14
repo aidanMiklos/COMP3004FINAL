@@ -15,3 +15,5 @@ moc_*
 ui_*.h
 qrc_*.cpp
 /DragonEndPOS
+*.autosave
+*.pro.user

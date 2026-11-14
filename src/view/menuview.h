@@ -19,6 +19,10 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class MenuView; }
+QT_END_NAMESPACE
+
 class MenuController;
 
 class MenuView : public QWidget
@@ -30,6 +34,8 @@ public:
 
 private:
     MenuController *controller;   // Figure 1: MenuView -> MenuController
+
+    Ui::MenuView *ui;
 };
 
 #endif // MENUVIEW_H
