@@ -52,7 +52,7 @@ public:
                OrderController *orders, DashboardController *dashboard,
                KitchenController *kitchen, QWidget *parent = nullptr);
 
-    QString retrieveUsername();
+
 
 
 
@@ -79,6 +79,7 @@ private:
 // Used to receive signals from this view's own widgets
 private slots:
     void handleViewSwap(ViewType requestedType);
+    QString retrieveUsername();
 };
 
 #endif // MAINWINDOW_H

@@ -170,7 +170,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="queueDashboardBtn_2">
+         <widget class="QPushButton" name="makeOrderDashboardBtn">
           <property name="text">
            <string>Dashboard</string>
           </property>

@@ -53,19 +53,9 @@ MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
     connect(loginView, &LoginView::requestViewChange, this, &MainWindow::handleViewSwap);
     connect(dashboardView, &DashboardView::requestViewChange, this, &MainWindow::handleViewSwap);
     connect(orderQueueView, &OrderQueueView::requestViewChange, this, &MainWindow::handleViewSwap);
+    connect(makeOrderView, &MakeOrderView::requestViewChange, this, &MainWindow::handleViewSwap);
 
 }
-
-QString MainWindow::retrieveUsername(){
-
-    // Retrieve username from account controller, for now just return "Henri"
-
-    QString test = "Henri";
-
-    return test;
-
-}
-
 
 // ----------------- PRIVATE SLOTS -----------------
 
@@ -103,3 +93,12 @@ void MainWindow::handleViewSwap(ViewType requestedType)
     }
 }
 
+QString MainWindow::retrieveUsername(){
+
+    // Retrieve username from account controller, for now just return "Henri"
+
+    QString test = "Henri";
+
+    return test;
+
+}
