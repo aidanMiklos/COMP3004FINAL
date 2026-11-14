@@ -130,6 +130,7 @@ bool OrderController::submitOrder(const QString &username, int points, int credi
     draftOrder->setStatus(STATUS_IN_PROGRESS);
     draftOrder->setOrderType(TYPE_ONLINE);
     draftOrder->setPlacedAt(QDateTime::currentDateTime());
+    draftOrder->setCustomerUsername(username);
 
     Order *placed = store.addOrder(std::move(draftOrder));
     draftUsername.clear();
