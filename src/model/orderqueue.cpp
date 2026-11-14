@@ -1,11 +1,27 @@
-/*
- * OrderQueue -- implementation
- *
- * TODO:
- *   - add() appends to the back; remove() takes a completed order out;
- *     orders() lists oldest first. [Overview sec. 2, Order Queue Process]
- */
-
 #include "orderqueue.h"
 
-OrderQueue::OrderQueue() = default;
+void OrderQueue::addOrder(Order *order)
+{
+    if(order != nullptr){
+        m_orders.append(order);
+    }
+}
+
+QVector<Order*> OrderQueue::orders()const{
+    return m_orders;
+}
+
+bool OrderQueue::removeOrder(int orderId)
+{
+    for (int i=0; i<m_orders.size();i++){
+        if(m_orders[i]->orderId() == orderId){
+            m_orders.removeAt(i);
+            return true;
+        }
+    }
+    return false;
+}
+
+int OrderQueue::size() const{
+    return m_orders.size();
+}
