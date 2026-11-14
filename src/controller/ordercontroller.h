@@ -21,8 +21,23 @@
 #ifndef ORDERCONTROLLER_H
 #define ORDERCONTROLLER_H
 
+#include <memory>
+
+#include <QString>
+
 class CafeDataStore;
 class Order;
+
+struct PriceBreakdown
+{
+    bool isValid = false;
+    int subtotalCents = 0;
+    int taxCents = 0;
+    int totalCents = 0;
+    int pointsUsed = 0;
+    int creditUsedCents = 0;
+    int amountChargedCents = 0;
+};
 
 class OrderController
 {
@@ -33,14 +48,19 @@ public:
     OrderController();
     ~OrderController();
 
-    // TODO: operations for the views. Pass the logged-in username in
-    //       (MainWindow gets it from AccountController) and return plain
-    //       data (QString, numbers), not model pointers.
+    bool canPlaceOrder(const QString &username) const;
+    bool startOrder(const QString &username);
+    bool addItem(const QString &menuItemName, int quantity);
+    void cancelOrder();
+    PriceBreakdown breakdown(const QString &username, int points, int creditCents) const;
+    bool submitOrder(const QString &username, int points, int creditCents);
 
 private:
-    CafeDataStore &store;   // Figure 1: OrderController -> CafeDataStore
-    // Owned until submitted; then the Customer owns it and this goes back to nullptr.
-    Order *draftOrder = nullptr;   // Figure 1: OrderController -> Order (order being built)
+    bool ownsDraft(const QString &username) const;
+
+    CafeDataStore &store;
+    std::unique_ptr<Order> draftOrder;
+    QString draftUsername;
 };
 
 #endif // ORDERCONTROLLER_H
