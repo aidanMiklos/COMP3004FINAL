@@ -1,42 +1,45 @@
-/*
- * Order -- Model subsystem (entity class)
- *
- * One order. Holds its OrderItems and knows its Customer (Figure 1). The
- * pricing and loyalty rules live here so they are written once.
- *
- * Spec notes:
- *   - Order number, items, final price with tax, amount charged, points
- *     used, credit used, points earned, status, and online or in person. [D1
- *     p.2 Default System Data]
- *   - An order record also has items and quantities, tax and payment status.
- *     [Overview sec. 4.3]
- *   - States: In Progress, Completed, Picked Up; online orders may be
- *     Cancelled; no going backwards. D1 uses only In Progress to Completed.
- *     [Overview sec. 3; D1 p.3-4 Business Rules]
- *   - The order date and time use the format YYYY-MM-DD:HH:MM. [Overview
- *     sec. 4.2]
- */
-
 #ifndef ORDER_H
 #define ORDER_H
-
-#include <QList>
-
-class Customer;
-class OrderItem;
+#include <QVector>
+#include <QString>
+#include "orderitem.h"
+#include <QDateTime>
 
 class Order
 {
 public:
-    Order();
-    ~Order();
-
-    Order(const Order &) = delete;
-    Order &operator=(const Order &) = delete;
-
+    Order(int orderId);
+    int orderId()const;
+    void addItem(const OrderItem &item);
+    QVector<OrderItem> items()const;
+    int subtotalCents()const;
+    int taxCents()const;
+    int totalCents() const;
+    int pointsUsed() const;
+    int creditUsedCents()const;
+    int amountChargedCents() const;
+    QString status()const;
+    void setStatus(const QString &status);
+    QString orderType()const;
+    void setOrderType(const QString &type);
+    int pointsEarned() const;
+    void setPayment(int points, int creditCents, int chargedCents, int earned);
+    QDateTime placedAt()const;
+    void setPlacedAt(const QDateTime &dateTime);
+    QString customerUsername()const;
+    void setCustomerUsername(const QString &username);
+    bool calculatePayment(int points, int creditCents);
 private:
-    Customer *customer = nullptr;   // Figure 1: Customer -- Order (queue shows the name)
-    QList<OrderItem *> items;       // Figure 1: Order -> OrderItem (owned)
+    int m_orderId;
+    QVector<OrderItem> m_items;
+    QString m_status;
+    QString m_orderType;
+    int m_pointsUsed;
+    int m_creditUsedCents;
+    int m_amountChargedCents;
+    int m_pointsEarned;
+    QDateTime m_placedAt;
+    QString m_customerUsername;
 };
 
 #endif // ORDER_H

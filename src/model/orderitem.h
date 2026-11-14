@@ -1,26 +1,19 @@
-/*
- * OrderItem -- Model subsystem (entity class)
- *
- * One line of an order: which MenuItem, and how many.
- *
- * Spec notes:
- *   - Order records include the items and their quantities. [Overview sec.
- *     4.3]
- *   - Each order lists the items purchased. [D1 p.2 Default System Data]
- */
-
 #ifndef ORDERITEM_H
 #define ORDERITEM_H
-
-class MenuItem;
+#include "menuitem.h"
 
 class OrderItem
 {
 public:
-    OrderItem();
+    OrderItem(MenuItem *menuItem, int quantity);
+    MenuItem* menuItem()const;
+    int quantity()const;
+    int subtotalCents() const;
+    void setQuantity(int quantity);
 
 private:
-    MenuItem *menuItem = nullptr;   // Figure 1: OrderItem -> MenuItem
+    MenuItem *m_menuItem;
+    int m_quantity;
 };
 
 #endif // ORDERITEM_H

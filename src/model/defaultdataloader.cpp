@@ -15,6 +15,7 @@
 #include "defaultdataloader.h"
 
 #include <QList>
+#include <QHash>
 
 #include "datastorage.h"
 #include "systemadministrator.h"
@@ -23,6 +24,11 @@
 #include "cashier.h"
 #include "customer.h"
 #include "ingredient.h"
+#include "menuitem.h"
+#include "recipeingredient.h"
+#include "order.h"
+#include "orderitem.h"
+#include <QDateTime>
 
 namespace {
 
@@ -249,7 +255,7 @@ const QList<CustomerData> defaultCustomers = {
           0, 0, 1403, 1403, 4},
      }},
 };
-/*User *makeStaff(const StaffData &d)
+User *makeStaff(const StaffData &d)
 {
   const QString role = d.role;
   if (role == "Kitchen Staff")
@@ -263,7 +269,7 @@ const QList<CustomerData> defaultCustomers = {
 
   Q_ASSERT_X(false, "makeStaff", "unknown role in defaultStaff");
   return nullptr;
-}*/
+}
 } // namespace
 
 DefaultDataLoader::DefaultDataLoader(DataStorage &storage)
@@ -273,26 +279,67 @@ DefaultDataLoader::DefaultDataLoader(DataStorage &storage)
 
 void DefaultDataLoader::load()
 {
-  /*
-    for(int i = 0; i < ingredients.size(); i++){
-      storage.addIngredient(new Ingredient(defaultIngredients.at(i.name, i.unit)))
-    }
-    for(int i = 0; i < defaultStaff.size(); i++){
-      storage.addUser(makeStaff(defaultStaff.at(i)));
-    }
-    for(int i = 0; i < defaultStaff.size(); i++){
-      storage.addUser(makeStaff(defaultStaff.at(i)));
+    QHash<QString, Ingredient*> ingredientMap;
+    for (const IngredientData &data : defaultIngredients){
+        Ingredient *ingredient = new Ingredient(data.name, 0);
+        storage.addIngredient(ingredient);
+        ingredientMap.insert(data.name, ingredient);
     }
 
-    for(int i = 0; i < defaultStaff.size(); i++){
-      storage.addUser(makeStaff(defaultStaff.at(i)));
+    for (const MenuItemData &data:defaultMenu){
+        MenuItem *item = new MenuItem(data.name, data.category, data.priceCents);
+
+        for(const RecipeLineData &line : data.recipe){
+            Ingredient *ingredient = ingredientMap.value(line.ingredient, nullptr);
+
+        if (ingredient!= nullptr){
+            item->addIngredient(RecipeIngredient(ingredient, line.quantity));
+        }
+        }
+
+        storage.addMenuItem(item);
+    }
+    for (const StaffData &staff : defaultStaff){
+        storage.addUser(makeStaff(staff));
     }
 
-    defaultMenu
-    defaultIngredients
-    defaultCustomers
-    */
-    // TODO: create Ingredient, MenuItem, staff and Customer objects (with their
-    //       past orders) from defaultIngredients, defaultMenu, defaultStaff and
-    //       defaultCustomers, and add them through storage.
+    for (const CustomerData &data : defaultCustomers){
+        Customer *customer = new Customer(
+                    data.name,
+                    data.username,
+                    data.email,
+                    data.pointsBalance)
+    ;
+
+    customer->setCreditCents(data.creditCents);
+    customer->setLoyaltyNumber(data.loyaltyNumber);
+    customer->setHomeAddress(data.homeAddress);
+
+    for(const PastOrderData &past :data.history){
+        Order order(past.number);
+        QString dateString = QString::fromUtf8(past.placedAt);
+        QDateTime date = QDateTime::fromString(
+                    dateString, "yyyy-MM-dd:HH:mm");
+        order.setPlacedAt(date);
+        order.setStatus(past.status);
+        order.setOrderType(past.type);
+        order.setPayment(
+                    past.pointsUsed,
+                    past.creditUsedCents,
+                    past.amountChargedCents,
+                    past.pointsEarned
+                    );
+    for (const OrderLineData &line :past.items){
+        for (MenuItem *item : storage.menuItems()){
+            if(item->name()==line.menuItem){
+                order.addItem(OrderItem(item, line.quantity));
+                break;
+            }
+        }
+    }
+    customer->addOrder(order);
+
+    }
+    storage.addUser(customer);
+ }
 }
