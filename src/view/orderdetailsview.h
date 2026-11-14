@@ -30,10 +30,17 @@ class OrderDetailsView : public QDialog
 public:
     explicit OrderDetailsView(KitchenController *controller, QWidget *parent = nullptr);
 
+    void requestedOrderId(int orderId);
+
 private:
     KitchenController *controller;   // Figure 1: OrderDetailsView -> KitchenController
+    int orderId;    // Used to store a given order's ID with the OrderDetailView. Prevents having to disconnect and reconnect the complete button
 
     Ui::OrderDetailsView *ui;
+
+private slots:
+    void completeBtnClicked();
+
 };
 
 #endif // ORDERDETAILSVIEW_H

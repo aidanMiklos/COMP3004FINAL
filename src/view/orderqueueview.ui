@@ -53,7 +53,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">QFrame#sideBar{
+      <string notr="true">QFrame#queueSideBar{
 	background-color: rgb(255, 255, 255)
 }</string>
      </property>
@@ -180,9 +180,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="dashboardOrderBtn">
+       <widget class="QPushButton" name="queueDashboardBtn">
         <property name="text">
-         <string>Create Order</string>
+         <string>Dashboard</string>
         </property>
        </widget>
       </item>
@@ -269,7 +269,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <layout class="QVBoxLayout" name="queueEntriesCont">
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
            </property>

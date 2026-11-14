@@ -32,10 +32,22 @@ class MenuView : public QWidget
 public:
     explicit MenuView(MenuController *controller, QWidget *parent = nullptr);
 
+signals:
+    // Used to tell the MakeOrderView what item the user has clicked on.
+    void addItem(const QString &menuItemName);
+
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     MenuController *controller;   // Figure 1: MenuView -> MenuController
 
     Ui::MenuView *ui;
+
+private slots:
+
+    void addItemBtnClicked(const QString &menuItemName);
+
 };
 
 #endif // MENUVIEW_H

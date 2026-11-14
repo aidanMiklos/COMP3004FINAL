@@ -52,6 +52,10 @@ public:
                OrderController *orders, DashboardController *dashboard,
                KitchenController *kitchen, QWidget *parent = nullptr);
 
+    QString retrieveUsername();
+
+
+
 // Used to notify the controller of stuff that has occurred
 signals:
 

@@ -17,6 +17,7 @@
 #define ORDERQUEUEVIEW_H
 
 #include <QWidget>
+#include "viewtype.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class OrderQueueView; }
@@ -32,11 +33,24 @@ class OrderQueueView : public QWidget
 public:
     explicit OrderQueueView(KitchenController *controller, QWidget *parent = nullptr);
 
+signals:
+
+    // Signal for MainWindow to request the view be swapped
+    void requestViewChange(ViewType requestedView);
+
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     KitchenController *controller;   // Figure 1: OrderQueueView -> KitchenController
     OrderDetailsView *detailsDialog;   // Figure 1: OrderQueueView -> OrderDetailsView
 
     Ui::OrderQueueView *ui;
+
+private slots:
+    void dashboardBtnClicked();
+    void orderDetailsBtnClicked(int orderId);
+
 };
 
 #endif // ORDERQUEUEVIEW_H

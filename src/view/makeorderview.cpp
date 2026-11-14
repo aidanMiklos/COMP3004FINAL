@@ -19,4 +19,13 @@ MakeOrderView::MakeOrderView(OrderController *controller, MenuController *menuCo
 {
     // TODO: lay out menuView, quantity, points and credit inputs, breakdown, Submit.
     ui->setupUi(this);
+
+    ui->makeOrderMenuCont->layout()->addWidget(menuView);
 }
+
+void MakeOrderView::custItemRequested(const QString &menuItemName) {
+
+
+
+}
+

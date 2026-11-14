@@ -40,6 +40,10 @@ private:
     MenuView *menuView;       // Figure 1: MakeOrderView -> MenuView (embedded)
 
     Ui::MakeOrderView *ui;
+
+private slots:
+    void custItemRequested(const QString &menuItemName);
+
 };
 
 #endif // MAKEORDERVIEW_H

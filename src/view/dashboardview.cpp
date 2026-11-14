@@ -64,6 +64,20 @@ void DashboardView::showEvent(QShowEvent *event) {
 
     ui->dashboardUserLbl->setText(accTypeLbl);
 
+    while (QLayoutItem *entryLayout = ui->orderHistoryEntriesCont->takeAt(0)){
+
+        // We then check if the returned item is a widget. We only really do this as to prevent calls to nullptr.
+        if(QWidget *entryWidget = entryLayout->widget()){
+
+            // Then delete it
+            entryWidget->deleteLater();
+
+        }
+
+        delete entryLayout;
+
+    }
+
     for (int i = 0; i < 5; ++i){
 
         // First we make a container for this entry
