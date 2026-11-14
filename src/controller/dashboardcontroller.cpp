@@ -17,41 +17,28 @@
 #include "order.h"
 #include "orderitem.h"
 
-namespace {
-
 const int HISTORY_LIMIT = 5;
-const char *const DATE_FORMAT = "yyyy-MM-dd:HH:mm";
+const QString DATE_FORMAT = "yyyy-MM-dd:HH:mm";
 
-Customer *findCustomer(CafeDataStore &store, const QString &username)
+static Customer *findCustomer(CafeDataStore &store, const QString &username)
 {
     return dynamic_cast<Customer *>(store.findUser(username));
 }
 
-bool isFinished(const Order &order)
+static bool isFinished(const Order &order)
 {
     return order.status() == "Picked Up" || order.status() == "Cancelled";
 }
 
-int currentOrderIndex(const QVector<Order> &orders)
+static QStringList itemLines(const Order &order)
 {
-    for (int i = orders.size() - 1; i >= 0; --i) {
-        if (!isFinished(orders.at(i)))
-            return i;
-    }
-    return -1;
-}
-
-QStringList itemLines(const Order &order)
-{
-    const QVector<OrderItem> items = order.items();
-
     QStringList lines;
-    for (const OrderItem &item : items)
-        lines.append(QString("%1 x %2").arg(item.quantity()).arg(item.menuItem()->name()));
+    for (const OrderItem &item : order.items())
+        lines.append(QString::number(item.quantity()) + " x " + item.menuItem()->name());
     return lines;
 }
 
-OrderSummary summarize(const Order &order)
+static OrderSummary summarize(const Order &order)
 {
     OrderSummary summary;
     summary.orderId = order.orderId();
@@ -67,8 +54,6 @@ OrderSummary summarize(const Order &order)
     return summary;
 }
 
-}
-
 DashboardController::DashboardController()
     : store(CafeDataStore::instance())
 {
@@ -78,7 +63,7 @@ CustomerDetails DashboardController::details(const QString &username) const
 {
     const Customer *customer = findCustomer(store, username);
     if (!customer)
-        return {};
+        return CustomerDetails();
 
     CustomerDetails result;
     result.name = customer->name();
@@ -93,35 +78,43 @@ CustomerDetails DashboardController::details(const QString &username) const
 bool DashboardController::hasCurrentOrder(const QString &username) const
 {
     const Customer *customer = findCustomer(store, username);
-    return customer && currentOrderIndex(customer->orderHistory()) >= 0;
+    if (!customer)
+        return false;
+
+    for (const Order &order : customer->orderHistory()) {
+        if (!isFinished(order))
+            return true;
+    }
+    return false;
 }
 
 OrderSummary DashboardController::currentOrder(const QString &username) const
 {
     const Customer *customer = findCustomer(store, username);
     if (!customer)
-        return {};
+        return OrderSummary();
 
-    const QVector<Order> orders = customer->orderHistory();
-    const int index = currentOrderIndex(orders);
-    if (index < 0)
-        return {};
-
-    return summarize(orders.at(index));
+    for (const Order &order : customer->orderHistory()) {
+        if (!isFinished(order))
+            return summarize(order);
+    }
+    return OrderSummary();
 }
 
 QList<OrderSummary> DashboardController::orderHistory(const QString &username) const
 {
     const Customer *customer = findCustomer(store, username);
     if (!customer)
-        return {};
+        return QList<OrderSummary>();
 
     const QVector<Order> orders = customer->orderHistory();
 
     QList<OrderSummary> result;
-    for (int i = orders.size() - 1; i >= 0 && result.size() < HISTORY_LIMIT; --i) {
-        if (isFinished(orders.at(i)))
-            result.append(summarize(orders.at(i)));
+    for (int i = orders.size() - 1; i >= 0; i--) {
+        if (result.size() == HISTORY_LIMIT)
+            break;
+        if (isFinished(orders[i]))
+            result.append(summarize(orders[i]));
     }
     return result;
 }

@@ -18,10 +18,8 @@ MenuController::MenuController()
 
 QStringList MenuController::categories() const
 {
-    const QList<MenuItem*> items = store.menuItems();
-
     QStringList result;
-    for (const MenuItem *item : items) { // Get the category of each item and add it to result
+    for (const MenuItem *item : store.menuItems()) { // Get the category of each item and add it to result
         if (!result.contains(item->category()))
             result.append(item->category()); 
     }
@@ -30,12 +28,14 @@ QStringList MenuController::categories() const
 
 QList<MenuEntry> MenuController::itemsIn(const QString &category) const
 {
-    const QList<MenuItem*> items = store.menuItems();
-
     QList<MenuEntry> result;
-    for (const MenuItem *item : items) { // Get the items in the specified category and add them to result
-        if (item->category() == category)
-            result.append({item->name(), item->priceCents()});
+    for (const MenuItem *item : store.menuItems()) { // Get the items in the specified category and add them to result
+        if (item->category() == category) {
+            MenuEntry entry;
+            entry.name = item->name();
+            entry.priceCents = item->priceCents();
+            result.append(entry);
+        }
     }
     return result;
 }

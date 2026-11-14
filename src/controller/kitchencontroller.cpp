@@ -21,33 +21,32 @@
 #include "orderqueue.h"
 #include "recipeingredient.h"
 
-namespace {
+const QString DATE_FORMAT = "yyyy-MM-dd:HH:mm";
+const QString STATUS_COMPLETED = "Completed";
 
-const char *const DATE_FORMAT = "yyyy-MM-dd:HH:mm";
-const char *const STATUS_COMPLETED = "Completed";
-
-Customer *findCustomer(CafeDataStore &store, const QString &username)
+static Customer *findCustomer(CafeDataStore &store, const QString &username)
 {
     return dynamic_cast<Customer *>(store.findUser(username));
 }
 
-QString customerName(CafeDataStore &store, const Order &order)
+static QString customerName(CafeDataStore &store, const Order &order)
 {
     const Customer *customer = findCustomer(store, order.customerUsername());
-    return customer ? customer->name() : QString();
+    if (!customer)
+        return QString();
+    return customer->name();
 }
 
-Order *findQueuedOrder(CafeDataStore &store, int orderId)
+static Order *findQueuedOrder(CafeDataStore &store, int orderId)
 {
-    const QVector<Order *> orders = store.orderQueue().orders();
-    for (Order *order : orders) {
+    for (Order *order : store.orderQueue().orders()) {
         if (order->orderId() == orderId)
             return order;
     }
     return nullptr;
 }
 
-KitchenItem toKitchenItem(const OrderItem &line)
+static KitchenItem toKitchenItem(const OrderItem &line)
 {
     const MenuItem *menuItem = line.menuItem();
 
@@ -55,12 +54,9 @@ KitchenItem toKitchenItem(const OrderItem &line)
     item.name = menuItem->name();
     item.quantity = line.quantity();
 
-    const QVector<RecipeIngredient> recipe = menuItem->ingredients();
-    for (const RecipeIngredient &part : recipe)
-        item.ingredients.append(QString("%1 %2").arg(part.quantity()).arg(part.ingredient()->name()));
+    for (const RecipeIngredient &part : menuItem->ingredients())
+        item.ingredients.append(QString::number(part.quantity()) + " " + part.ingredient()->name());
     return item;
-}
-
 }
 
 KitchenController::KitchenController()
@@ -70,10 +66,8 @@ KitchenController::KitchenController()
 
 QList<QueueEntry> KitchenController::queue() const
 {
-    const QVector<Order *> orders = store.orderQueue().orders();
-
     QList<QueueEntry> result;
-    for (const Order *order : orders) {
+    for (const Order *order : store.orderQueue().orders()) {
         QueueEntry entry;
         entry.orderId = order->orderId();
         entry.customerName = customerName(store, *order);
@@ -87,7 +81,7 @@ KitchenOrderDetails KitchenController::orderDetails(int orderId) const
 {
     const Order *order = findQueuedOrder(store, orderId);
     if (!order)
-        return {};
+        return KitchenOrderDetails();
 
     KitchenOrderDetails result;
     result.isValid = true;
@@ -96,8 +90,7 @@ KitchenOrderDetails KitchenController::orderDetails(int orderId) const
     result.placedAt = order->placedAt().toString(DATE_FORMAT);
     result.status = order->status();
 
-    const QVector<OrderItem> lines = order->items();
-    for (const OrderItem &line : lines)
+    for (const OrderItem &line : order->items())
         result.items.append(toKitchenItem(line));
     return result;
 }

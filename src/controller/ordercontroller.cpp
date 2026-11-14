@@ -24,28 +24,23 @@
 #include "orderitem.h"
 #include "orderqueue.h"
 
-namespace {
+const QString STATUS_IN_PROGRESS = "In Progress";
+const QString STATUS_PICKED_UP = "Picked Up";
+const QString STATUS_CANCELLED = "Cancelled";
+const QString TYPE_ONLINE = "Online";
 
-const char *const STATUS_IN_PROGRESS = "In Progress";
-const char *const STATUS_PICKED_UP = "Picked Up";
-const char *const STATUS_CANCELLED = "Cancelled";
-const char *const TYPE_ONLINE = "Online";
-
-Customer *findCustomer(CafeDataStore &store, const QString &username)
+static Customer *findCustomer(CafeDataStore &store, const QString &username)
 {
     return dynamic_cast<Customer *>(store.findUser(username));
 }
 
-bool hasOpenOrder(const Customer &customer)
+static bool hasOpenOrder(const Customer &customer)
 {
-    const QVector<Order> orders = customer.orderHistory();
-    for (const Order &order : orders) {
+    for (const Order &order : customer.orderHistory()) {
         if (order.status() != STATUS_PICKED_UP && order.status() != STATUS_CANCELLED)
             return true;
     }
     return false;
-}
-
 }
 
 OrderController::OrderController()
@@ -53,7 +48,9 @@ OrderController::OrderController()
 {
 }
 
-OrderController::~OrderController() = default;
+OrderController::~OrderController()
+{
+}
 
 bool OrderController::canPlaceOrder(const QString &username) const
 {
@@ -76,8 +73,7 @@ bool OrderController::addItem(const QString &menuItemName, int quantity)
     if (!draftOrder || quantity <= 0)
         return false;
 
-    const QList<MenuItem *> items = store.menuItems();
-    for (MenuItem *item : items) {
+    for (MenuItem *item : store.menuItems()) {
         if (item->name() == menuItemName) {
             draftOrder->addItem(OrderItem(item, quantity));
             return true;
@@ -97,7 +93,7 @@ PriceBreakdown OrderController::breakdown(const QString &username, int points,
 {
     const Customer *customer = findCustomer(store, username);
     if (!customer || !ownsDraft(username))
-        return {};
+        return PriceBreakdown();
 
     Order preview = *draftOrder;
 
