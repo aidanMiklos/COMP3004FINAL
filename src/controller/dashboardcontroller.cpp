@@ -11,6 +11,7 @@
 #include <QDateTime>
 #include <QVector>
 
+#include "accountcontroller.h"
 #include "cafedatastore.h"
 #include "customer.h"
 #include "menuitem.h"
@@ -19,11 +20,6 @@
 
 const int HISTORY_LIMIT = 5;
 const QString DATE_FORMAT = "yyyy-MM-dd:HH:mm";
-
-static Customer *findCustomer(CafeDataStore &store, const QString &username)
-{
-    return dynamic_cast<Customer *>(store.findUser(username));
-}
 
 static bool isFinished(const Order &order)
 {
@@ -54,14 +50,14 @@ static OrderSummary summarize(const Order &order)
     return summary;
 }
 
-DashboardController::DashboardController()
-    : store(CafeDataStore::instance())
+DashboardController::DashboardController(AccountController &accounts)
+    : store(CafeDataStore::instance()), accounts(accounts)
 {
 }
 
-CustomerDetails DashboardController::details(const QString &username) const
+CustomerDetails DashboardController::details() const
 {
-    const Customer *customer = findCustomer(store, username);
+    const Customer *customer = currentCustomer();
     if (!customer)
         return CustomerDetails();
 
@@ -75,9 +71,9 @@ CustomerDetails DashboardController::details(const QString &username) const
     return result;
 }
 
-bool DashboardController::hasCurrentOrder(const QString &username) const
+bool DashboardController::hasCurrentOrder() const
 {
-    const Customer *customer = findCustomer(store, username);
+    const Customer *customer = currentCustomer();
     if (!customer)
         return false;
 
@@ -88,9 +84,9 @@ bool DashboardController::hasCurrentOrder(const QString &username) const
     return false;
 }
 
-OrderSummary DashboardController::currentOrder(const QString &username) const
+OrderSummary DashboardController::currentOrder() const
 {
-    const Customer *customer = findCustomer(store, username);
+    const Customer *customer = currentCustomer();
     if (!customer)
         return OrderSummary();
 
@@ -101,9 +97,9 @@ OrderSummary DashboardController::currentOrder(const QString &username) const
     return OrderSummary();
 }
 
-QList<OrderSummary> DashboardController::orderHistory(const QString &username) const
+QList<OrderSummary> DashboardController::orderHistory() const
 {
-    const Customer *customer = findCustomer(store, username);
+    const Customer *customer = currentCustomer();
     if (!customer)
         return QList<OrderSummary>();
 
@@ -119,10 +115,9 @@ QList<OrderSummary> DashboardController::orderHistory(const QString &username) c
     return result;
 }
 
-bool DashboardController::updateContact(const QString &username, const QString &email,
-                                        const QString &homeAddress)
+bool DashboardController::updateContact(const QString &email, const QString &homeAddress)
 {
-    Customer *customer = findCustomer(store, username);
+    Customer *customer = currentCustomer();
     const QString newEmail = email.trimmed();
     const QString newAddress = homeAddress.trimmed();
 
@@ -132,4 +127,11 @@ bool DashboardController::updateContact(const QString &username, const QString &
     customer->setEmail(newEmail);
     customer->setHomeAddress(newAddress);
     return true;
+}
+
+Customer *DashboardController::currentCustomer() const
+{
+    if (!accounts.isLoggedIn())
+        return nullptr;
+    return dynamic_cast<Customer *>(store.findUser(accounts.currentUsername()));
 }

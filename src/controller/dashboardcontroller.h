@@ -20,7 +20,9 @@
 #include <QString>
 #include <QStringList>
 
+class AccountController;
 class CafeDataStore;
+class Customer;
 
 struct CustomerDetails
 {
@@ -49,21 +51,23 @@ struct OrderSummary
 class DashboardController
 {
 public:
-    DashboardController();
+    explicit DashboardController(AccountController &accounts);
 
     // Done: operations for the views. Pass the logged-in username in
     //       (MainWindow gets it from AccountController) and return plain
     //       data (QString, numbers), not model pointers.
 
-    CustomerDetails details(const QString &username) const;
-    bool hasCurrentOrder(const QString &username) const;
-    OrderSummary currentOrder(const QString &username) const;
-    QList<OrderSummary> orderHistory(const QString &username) const;
-    bool updateContact(const QString &username, const QString &email,
-                       const QString &homeAddress);
+    CustomerDetails details() const;
+    bool hasCurrentOrder() const;
+    OrderSummary currentOrder() const;
+    QList<OrderSummary> orderHistory() const;
+    bool updateContact(const QString &email, const QString &homeAddress);
 
 private:
+    Customer *currentCustomer() const;
+
     CafeDataStore &store;
+    AccountController &accounts;
 };
 
 #endif // DASHBOARDCONTROLLER_H
