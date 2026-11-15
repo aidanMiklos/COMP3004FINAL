@@ -1,10 +1,17 @@
 /*
  * Staff -- implementation
  *
- * TODO:
  *   - Shared code for staff (staff ID).
  */
 
 #include "staff.h"
 
-// Shared code for every Staff goes here.
+Staff::Staff(const QString &name, const QString &username, const QString &staffId)
+    : User(name, username), m_staffId(staffId)
+{
+}
+
+QString Staff::staffId() const
+{
+    return m_staffId;
+}

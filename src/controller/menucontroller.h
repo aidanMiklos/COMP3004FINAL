@@ -12,7 +12,17 @@
 #ifndef MENUCONTROLLER_H
 #define MENUCONTROLLER_H
 
+#include <QList>
+#include <QString>
+#include <QStringList>
+
 class CafeDataStore;
+
+struct MenuEntry
+{
+    QString name;
+    int priceCents = 0;
+};
 
 class MenuController
 {
@@ -23,8 +33,11 @@ public:
     //       (MainWindow gets it from AccountController) and return plain
     //       data (QString, numbers), not model pointers.
 
+    QStringList categories() const;
+    QList<MenuEntry> itemsIn(const QString &category) const;
+
 private:
-    CafeDataStore &store;   // Figure 1: MenuController -> CafeDataStore
+    CafeDataStore &store;
 };
 
 #endif // MENUCONTROLLER_H

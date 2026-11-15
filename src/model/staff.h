@@ -14,14 +14,19 @@
 #ifndef STAFF_H
 #define STAFF_H
 
+#include <QString>
 #include "user.h"
 
 class Staff : public User
 {
 public:
+    QString staffId() const;
 
 protected:
-    Staff() = default;   // abstract: only subclasses are created
+    Staff(const QString &name, const QString &username, const QString &staffId);
+
+private:
+    QString m_staffId;
 };
 
 #endif // STAFF_H

@@ -18,7 +18,35 @@
 #ifndef KITCHENCONTROLLER_H
 #define KITCHENCONTROLLER_H
 
+#include <QList>
+#include <QString>
+#include <QStringList>
+
 class CafeDataStore;
+
+struct QueueEntry
+{
+    int orderId = 0;
+    QString customerName;
+    QString placedAt;
+};
+
+struct KitchenItem
+{
+    QString name;
+    int quantity = 0;
+    QStringList ingredients;
+};
+
+struct KitchenOrderDetails
+{
+    bool isValid = false;
+    int orderId = 0;
+    QString customerName;
+    QString placedAt;
+    QString status;
+    QList<KitchenItem> items;
+};
 
 class KitchenController
 {
@@ -29,8 +57,12 @@ public:
     //       (MainWindow gets it from AccountController) and return plain
     //       data (QString, numbers), not model pointers.
 
+    QList<QueueEntry> queue() const;
+    KitchenOrderDetails orderDetails(int orderId) const;
+    bool completeOrder(int orderId);
+
 private:
-    CafeDataStore &store;   // Figure 1: KitchenController -> CafeDataStore
+    CafeDataStore &store;
 };
 
 #endif // KITCHENCONTROLLER_H
