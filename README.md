@@ -32,17 +32,17 @@ TODO: list all 11 default users.
 
 | Role | Name | Username |
 |---|---|---|
-| Customer | TODO | TODO |
-| Customer | TODO | TODO |
-| Customer | TODO | TODO |
-| Customer | TODO | TODO |
-| Customer | TODO | TODO |
-| Kitchen Staff | TODO | TODO |
-| Kitchen Staff | TODO | TODO |
-| Cashier | TODO | TODO |
-| Cashier | TODO | TODO |
-| Manager | TODO | TODO |
-| System Administrator | TODO | TODO |
+| Customer | Samuel Tarley | starley |
+| Customer | Mira Reed | mreed |
+| Customer | David Seaworth | dseaworth |
+| Customer | Peter Payne | ppayne |
+| Customer | Leanne Mormont | lmormont |
+| Kitchen Staff | Timmy Tortoise | ttortoise |
+| Kitchen Staff | Gerald Waters | gwaters |
+| Cashier | Harold the Hare | hhare |
+| Cashier | Rosie Hill | rhill |
+| Manager | Walter Manderley | wmanderley |
+| System Administrator | Ellis Luwin | eluwin |
 
 ## Not implemented or partly implemented
 
