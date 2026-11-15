@@ -25,7 +25,9 @@
 
 #include <QString>
 
+class AccountController;
 class CafeDataStore;
+class Customer;
 class Order;
 
 struct PriceBreakdown
@@ -45,22 +47,24 @@ public:
     // Exact message the D1 outline requires (p.3, Business Rules).
     static constexpr const char *ONE_ORDER_MESSAGE = "Only one order can be placed at a time";
 
-    OrderController();
+    explicit OrderController(AccountController &accounts);
     ~OrderController();
 
-    bool canPlaceOrder(const QString &username) const;
-    int availablePoints(const QString &username) const;
-    int availableCreditCents(const QString &username) const;
-    bool startOrder(const QString &username);
+    bool canPlaceOrder() const;
+    int availablePoints() const;
+    int availableCreditCents() const;
+    bool startOrder();
     bool addItem(const QString &menuItemName, int quantity);
     void cancelOrder();
-    PriceBreakdown breakdown(const QString &username, int points, int creditCents) const;
-    bool submitOrder(const QString &username, int points, int creditCents);
+    PriceBreakdown breakdown(int points, int creditCents) const;
+    bool submitOrder(int points, int creditCents);
 
 private:
-    bool ownsDraft(const QString &username) const;
+    Customer *currentCustomer() const;
+    bool ownsDraft() const;
 
     CafeDataStore &store;
+    AccountController &accounts;
     std::unique_ptr<Order> draftOrder;
     QString draftUsername;
 };
