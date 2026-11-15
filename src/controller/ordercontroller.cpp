@@ -17,6 +17,7 @@
 #include <QList>
 #include <QVector>
 
+#include "accountcontroller.h"
 #include "cafedatastore.h"
 #include "customer.h"
 #include "menuitem.h"
@@ -29,11 +30,6 @@ const QString STATUS_PICKED_UP = "Picked Up";
 const QString STATUS_CANCELLED = "Cancelled";
 const QString TYPE_ONLINE = "Online";
 
-static Customer *findCustomer(CafeDataStore &store, const QString &username)
-{
-    return dynamic_cast<Customer *>(store.findUser(username));
-}
-
 static bool hasOpenOrder(const Customer &customer)
 {
     for (const Order &order : customer.orderHistory()) {
@@ -43,8 +39,8 @@ static bool hasOpenOrder(const Customer &customer)
     return false;
 }
 
-OrderController::OrderController()
-    : store(CafeDataStore::instance())
+OrderController::OrderController(AccountController &accounts)
+    : store(CafeDataStore::instance()), accounts(accounts)
 {
 }
 
@@ -52,31 +48,31 @@ OrderController::~OrderController()
 {
 }
 
-bool OrderController::canPlaceOrder(const QString &username) const
+bool OrderController::canPlaceOrder() const
 {
-    const Customer *customer = findCustomer(store, username);
+    const Customer *customer = currentCustomer();
     return customer && !hasOpenOrder(*customer);
 }
 
-int OrderController::availablePoints(const QString &username) const
+int OrderController::availablePoints() const
 {
-    const Customer *customer = findCustomer(store, username);
+    const Customer *customer = currentCustomer();
     return customer ? customer->loyaltyPoints() : 0;
 }
 
-int OrderController::availableCreditCents(const QString &username) const
+int OrderController::availableCreditCents() const
 {
-    const Customer *customer = findCustomer(store, username);
+    const Customer *customer = currentCustomer();
     return customer ? customer->creditCents() : 0;
 }
 
-bool OrderController::startOrder(const QString &username)
+bool OrderController::startOrder()
 {
-    if (!canPlaceOrder(username))
+    if (!canPlaceOrder())
         return false;
 
     draftOrder = std::make_unique<Order>(store.nextOrderId());
-    draftUsername = username;
+    draftUsername = accounts.currentUsername();
     return true;
 }
 
@@ -100,11 +96,10 @@ void OrderController::cancelOrder()
     draftUsername.clear();
 }
 
-PriceBreakdown OrderController::breakdown(const QString &username, int points,
-                                          int creditCents) const
+PriceBreakdown OrderController::breakdown(int points, int creditCents) const
 {
-    const Customer *customer = findCustomer(store, username);
-    if (!customer || !ownsDraft(username))
+    const Customer *customer = currentCustomer();
+    if (!customer || !ownsDraft())
         return PriceBreakdown();
 
     Order preview = *draftOrder;
@@ -126,10 +121,10 @@ PriceBreakdown OrderController::breakdown(const QString &username, int points,
     return result;
 }
 
-bool OrderController::submitOrder(const QString &username, int points, int creditCents)
+bool OrderController::submitOrder(int points, int creditCents)
 {
-    Customer *customer = findCustomer(store, username);
-    if (!customer || !ownsDraft(username) || draftOrder->items().isEmpty() || hasOpenOrder(*customer))
+    Customer *customer = currentCustomer();
+    if (!customer || !ownsDraft() || draftOrder->items().isEmpty() || hasOpenOrder(*customer))
         return false;
 
     if (!customer->payForOrder(*draftOrder, points, creditCents))
@@ -138,7 +133,7 @@ bool OrderController::submitOrder(const QString &username, int points, int credi
     draftOrder->setStatus(STATUS_IN_PROGRESS);
     draftOrder->setOrderType(TYPE_ONLINE);
     draftOrder->setPlacedAt(QDateTime::currentDateTime());
-    draftOrder->setCustomerUsername(username);
+    draftOrder->setCustomerUsername(draftUsername);
 
     Order *placed = store.addOrder(std::move(draftOrder));
     draftUsername.clear();
@@ -150,7 +145,14 @@ bool OrderController::submitOrder(const QString &username, int points, int credi
     return true;
 }
 
-bool OrderController::ownsDraft(const QString &username) const
+Customer *OrderController::currentCustomer() const
 {
-    return draftOrder && draftUsername == username;
+    if (!accounts.isLoggedIn())
+        return nullptr;
+    return dynamic_cast<Customer *>(store.findUser(accounts.currentUsername()));
+}
+
+bool OrderController::ownsDraft() const
+{
+    return draftOrder && draftUsername == accounts.currentUsername();
 }

@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
     // through CafeDataStore (Figure 1).
     AccountController accounts;
     MenuController menu;
-    OrderController orders;
-    DashboardController dashboard;
+    OrderController orders(accounts);
+    DashboardController dashboard(accounts);
     KitchenController kitchen;
 
     MainWindow window(&accounts, &menu, &orders, &dashboard, &kitchen);
