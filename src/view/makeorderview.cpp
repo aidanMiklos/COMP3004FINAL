@@ -13,7 +13,6 @@
 
 #include "menuview.h"
 #include "viewtype.h"
-#include <QtDebug>
 
 MakeOrderView::MakeOrderView(OrderController *controller, MenuController *menuController, QWidget *parent)
     : QWidget(parent), controller(controller),
@@ -63,12 +62,8 @@ void MakeOrderView::showEvent(QShowEvent *event) {
 
 void MakeOrderView::custItemRequested(const QString &menuItemName) {
 
-    qDebug() << "custItemRequested, checking if make orer possible..." << controller->canPlaceOrder();
-
     // First we check if the user can even place an order
     if(controller->canPlaceOrder()){
-
-        qDebug() << "custItemRequested fired";
 
         // Then we add the item. Since we don't have the ability to add in bulk, it will always be 1
         controller->addItem(menuItemName, 1);
@@ -84,8 +79,6 @@ void MakeOrderView::updateCheckout() {
 
     // We retrieve the current breakdown of the users current order from the controller
     PriceBreakdown breakdown = controller->breakdown(controller->availablePoints(),controller->availableCreditCents());
-
-    qDebug() << "updating checkout: " << QLocale().toCurrencyString(breakdown.subtotalCents/100.0);
 
     ui->makeOrderSubTotalLbl->setText("Subtotal: " + QLocale().toCurrencyString(breakdown.subtotalCents/100.0));
     ui->makeOrderTaxLbl->setText("Tax: " + QLocale().toCurrencyString(breakdown.taxCents/100.0));

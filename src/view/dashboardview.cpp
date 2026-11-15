@@ -11,7 +11,6 @@
 #include "viewtype.h"
 #include "dashboardcontroller.h"
 #include <QWidget>
-#include <QDebug>
 #include <QLocale>
 
 
@@ -51,7 +50,6 @@ void DashboardView::showEvent(QShowEvent *event) {
 void DashboardView::displayCurrentOrder() {
 
     // Finally, we update the user's current order, if they have one
-    qDebug() << "user has current order: " << controller->hasCurrentOrder();
 
     if (controller->hasCurrentOrder()){
 
@@ -82,8 +80,6 @@ void DashboardView::displayCurrentOrder() {
 void DashboardView::visualUpdateUserType(const QString &userType) {
 
     // When the user logs in, we adjust the visual to reflect who is visiting
-    qDebug() << userType;
-
     ui->dashboardUserLbl->setText(userType);
 
     // Only kitchen staff can see the order queue

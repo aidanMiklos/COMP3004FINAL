@@ -11,7 +11,6 @@
 #include "menucontroller.h"
 #include <QLabel>
 #include <QPushButton>
-#include <QtDebug>
 
 MenuView::MenuView(MenuController *controller, QWidget *parent)
     : QWidget(parent), controller(controller), ui(new Ui::MenuView)
@@ -95,8 +94,6 @@ void MenuView::displayMenu() {
 }
 
 void MenuView::addItemBtnClicked(const QString &menuItemName) {
-
-    qDebug() << "addItemBtnClicked from menuview";
 
     // When the add button is clicked, we emit what was clicked, and the makeorderview will pick up on it
     emit addItem(menuItemName);

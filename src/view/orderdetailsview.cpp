@@ -9,7 +9,6 @@
 #include "orderdetailsview.h"
 #include "ui_orderdetailsview.h"
 #include "kitchencontroller.h"
-#include <QDebug>
 
 OrderDetailsView::OrderDetailsView(KitchenController *controller, QWidget *parent)
     : QDialog(parent), controller(controller), orderId(-1),
@@ -75,8 +74,6 @@ void OrderDetailsView::requestedOrderId(int orderId) {
 
 
 void OrderDetailsView::completeBtnClicked(){
-
-    qDebug() << "orderID: " << orderId;
 
     // We tell the kitchenController to set the order to completed
     controller->completeOrder(orderId);
