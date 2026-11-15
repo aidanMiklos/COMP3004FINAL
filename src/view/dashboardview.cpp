@@ -23,13 +23,14 @@ DashboardView::DashboardView(DashboardController *controller, QWidget *parent)
     connect(ui->dashboardOrderBtn, &QPushButton::clicked, this, &DashboardView::createOrderBtnClicked);
     connect(ui->dashboardQueueBtn, &QPushButton::clicked, this, &DashboardView::orderQueueBtnClicked);
     connect(ui->dashboardSignOutBtn, &QPushButton::clicked, this, &DashboardView::signoutBtnClicked);
+    connect(ui->dashboardUpdateInfoBtn, &QPushButton::clicked, this, &DashboardView::updateInfoBtnClicked);
 
 }
 
 void DashboardView::showEvent(QShowEvent *event) {
 
-    // Here we would request info from the Dash
-    CustomerDetails custDetails = controller->details();
+    // We first set the user's information
+    displayClientInfo();
 
     // We then create the user's order history
     displayOrderHistory();
@@ -37,7 +38,15 @@ void DashboardView::showEvent(QShowEvent *event) {
     // As well as their current order
     displayCurrentOrder();
 
-    // We also update the text of the label's to reflect the user currently signed in
+
+}
+
+void DashboardView::displayClientInfo() {
+
+    // We request info from the controller
+    CustomerDetails custDetails = controller->details();
+
+    // Then we update the text of the label's to reflect the user currently signed in
     ui->dashboardNameLbl->setText("Name: " + custDetails.name);
     ui->dashboardAddressLbl->setText("Home Address: " + custDetails.homeAddress);
     ui->dashboardPointsAmountLbl->setText("Loyalty Points: " + QString::number(custDetails.loyaltyPoints));
@@ -162,6 +171,21 @@ void DashboardView::displayOrderHistory() {
 }
 
 // ----------------- PRIVATE SLOTS -----------------
+
+void DashboardView::updateInfoBtnClicked() {
+
+    if (controller->updateContact(ui->dashboardEmailInput->text(), ui->dashboardAddressInput->text())) {
+
+        // If the provided information was acceptable for updating, we refresh the clients information
+        displayClientInfo();
+
+        // And empty the update text inputs
+        ui->dashboardEmailInput->setText("");
+        ui->dashboardAddressInput->setText("");
+
+    }
+
+}
 
 void DashboardView::createOrderBtnClicked() {
 

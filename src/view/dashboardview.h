@@ -58,12 +58,14 @@ private:
 
     void displayOrderHistory();
     void displayCurrentOrder();
+    void displayClientInfo();
 
 // Used to receive signals from this view's own widgets
 private slots:
     void createOrderBtnClicked();
     void orderQueueBtnClicked();
     void signoutBtnClicked();
+    void updateInfoBtnClicked();
 };
 
 

@@ -331,6 +331,34 @@
          </layout>
         </item>
         <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Update Contact Information (Email, Home Address):</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="dashboardEmailInput">
+            <property name="inputMethodHints">
+             <set>Qt::ImhNone</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="dashboardAddressInput"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="dashboardUpdateInfoBtn">
+            <property name="text">
+             <string>Submit Updated Contact Information</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QLabel" name="dashboardCurrentOrderLbl">
@@ -442,7 +470,7 @@
            <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -476,7 +504,7 @@
              <x>0</x>
              <y>0</y>
              <width>691</width>
-             <height>192</height>
+             <height>68</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
