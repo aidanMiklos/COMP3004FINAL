@@ -11,6 +11,7 @@
 #include "viewtype.h"
 
 #include "orderdetailsview.h"
+#include "kitchencontroller.h"
 
 OrderQueueView::OrderQueueView(KitchenController *controller, QWidget *parent)
     : QWidget(parent), controller(controller),
@@ -21,9 +22,24 @@ OrderQueueView::OrderQueueView(KitchenController *controller, QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->queueDashboardBtn, &QPushButton::clicked, this, &OrderQueueView::dashboardBtnClicked);
+    connect(detailsDialog, &OrderDetailsView::signalOrderSetCompleted, this, &OrderQueueView::orderSetCompleted);
+    connect(ui->orderQueueSignOutBtn, &QPushButton::clicked, this, &OrderQueueView::signoutBtnClicked);
+}
+
+void OrderQueueView::visualUpdateUserType(const QString &userType) {
+
+    ui->orderQueueUserLbl->setText(userType);
+
 }
 
 void OrderQueueView::showEvent(QShowEvent *event) {
+
+    // Simply call resetVisuals
+    resetVisuals();
+
+}
+
+void OrderQueueView::resetVisuals() {
 
     // Since views are created on start-up and then just reused, we need to delete the queue from the last visit that is still here\
     // First we check if there are any entries by using takeAt(), which removes the layout at the specified index
@@ -42,7 +58,9 @@ void OrderQueueView::showEvent(QShowEvent *event) {
 
     }
 
-    for (int i = 0; i < 200; ++i){
+    QList<QueueEntry> queueItems = controller->queue();
+
+    for (QueueEntry currentEntry : queueItems){
 
         // First we make a container for this entry
         QWidget *entryContainer = new QWidget;
@@ -51,16 +69,17 @@ void OrderQueueView::showEvent(QShowEvent *event) {
         QGridLayout *gridLayout = new QGridLayout(entryContainer);
 
         // Now we add labels about the given order's information
-        gridLayout->addWidget(new QLabel("Order ID: "), 0, 0);
-        gridLayout->addWidget(new QLabel("Customer Name: "), 0, 1);
-        gridLayout->addWidget(new QLabel("Order Date and Time: "), 0, 2);
+        gridLayout->addWidget(new QLabel("Order ID: " + QString(currentEntry.orderId)), 0, 0);
+        gridLayout->addWidget(new QLabel("Customer Name: " + currentEntry.customerName), 0, 1);
+        gridLayout->addWidget(new QLabel("Order Date and Time: " + currentEntry.placedAt), 0, 2);
 
         // For the order queue, we need to be able to view the info about each order, so we add a button for that
         QPushButton *detailsBtn = new QPushButton("View Details", this);
         // Link the button so that it can actually call a function
-        connect(detailsBtn, &QPushButton::clicked, this, [this, i] ()
+        int localOrderId = currentEntry.orderId;
+        connect(detailsBtn, &QPushButton::clicked, this, [this, localOrderId] ()
             {
-                OrderQueueView::orderDetailsBtnClicked(i);
+                OrderQueueView::orderDetailsBtnClicked(localOrderId);
             }
         );
 
@@ -74,9 +93,16 @@ void OrderQueueView::showEvent(QShowEvent *event) {
 
 }
 
+
 void OrderQueueView::dashboardBtnClicked(){
 
     emit requestViewChange(ViewType::DashboardView);
+
+}
+
+void OrderQueueView::signoutBtnClicked(){
+
+    emit requestViewChange(ViewType::LoginView);
 
 }
 
@@ -89,3 +115,14 @@ void OrderQueueView::orderDetailsBtnClicked(int orderId){
     detailsDialog->show();
 
 }
+
+void OrderQueueView::orderSetCompleted() {
+
+    // When an order is set completed, we need to close the order details dialogue box
+    detailsDialog->hide();
+
+    // Then we reset the visuals to reflect the new queue that lacks the just completed order
+    resetVisuals();
+
+}
+

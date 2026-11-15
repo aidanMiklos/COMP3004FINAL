@@ -33,6 +33,8 @@ class OrderQueueView : public QWidget
 public:
     explicit OrderQueueView(KitchenController *controller, QWidget *parent = nullptr);
 
+    void visualUpdateUserType(const QString &userType);
+
 signals:
 
     // Signal for MainWindow to request the view be swapped
@@ -47,9 +49,13 @@ private:
 
     Ui::OrderQueueView *ui;
 
+    void resetVisuals();
+
 private slots:
     void dashboardBtnClicked();
     void orderDetailsBtnClicked(int orderId);
+    void orderSetCompleted();
+    void signoutBtnClicked();
 
 };
 

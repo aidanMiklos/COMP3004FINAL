@@ -9,8 +9,10 @@
 #include "dashboardview.h"
 #include "ui_dashboardview.h"
 #include "viewtype.h"
+#include "dashboardcontroller.h"
 #include <QWidget>
 #include <QDebug>
+#include <QLocale>
 
 
 DashboardView::DashboardView(DashboardController *controller, QWidget *parent)
@@ -21,48 +23,97 @@ DashboardView::DashboardView(DashboardController *controller, QWidget *parent)
 
     connect(ui->dashboardOrderBtn, &QPushButton::clicked, this, &DashboardView::createOrderBtnClicked);
     connect(ui->dashboardQueueBtn, &QPushButton::clicked, this, &DashboardView::orderQueueBtnClicked);
+    connect(ui->dashboardSignOutBtn, &QPushButton::clicked, this, &DashboardView::signoutBtnClicked);
+
 }
-
-//void DashboardView::displayUsername(const QString &name)
-//{
-
-//    ui->dashboardMainLbl->setText("Welcome " + name);
-
-//}
 
 void DashboardView::showEvent(QShowEvent *event) {
 
     // Here we would request info from the Dash
-//    temp funcs for now
+    CustomerDetails custDetails = controller->details();
 
-    int accType = 2;
-    QString accTypeLbl;
+    // We then create the user's order history
+    displayOrderHistory();
 
-    switch(accType){
+    // As well as their current order
+    displayCurrentOrder();
 
-        default:
-            accTypeLbl = "Customer";
-        break;
+    // We also update the text of the label's to reflect the user currently signed in
+    ui->dashboardNameLbl->setText("Name: " + custDetails.name);
+    ui->dashboardAddressLbl->setText("Home Address: " + custDetails.homeAddress);
+    ui->dashboardPointsAmountLbl->setText("Loyalty Points: " + QString::number(custDetails.loyaltyPoints));
+    ui->dashboardEmailLbl->setText("Email: " + custDetails.email);
+    ui->dashboardPointsNumLbl->setText("Loyalty Points #: " + custDetails.loyaltyNumber);
+    ui->dashboardCreditAmountLbl->setText("Account Credit: " + QString::number(custDetails.creditCents));
 
-        case 1:
-            accTypeLbl = "Cashier";
-        break;
+}
 
-        case 2:
-            accTypeLbl = "Kitchen Staff";
-        break;
+void DashboardView::displayCurrentOrder() {
 
-        case 3:
-            accTypeLbl = "Manager";
-        break;
+    // Finally, we update the user's current order, if they have one
+    qDebug() << "user has current order: " << controller->hasCurrentOrder();
 
-        case 4:
-            accTypeLbl = "Administrator";
-        break;
+    if (controller->hasCurrentOrder()){
+
+        OrderSummary currentOrder = controller->currentOrder();
+
+        ui->dashboardCurrentOrderLbl->setText("Current Order:");
+        ui->dashboardCurrOrderInfoFrame->setVisible(true);
+
+        ui->dashboardCOIDLbl->setText("Order ID: " + QString::number(currentOrder.orderId));
+        ui->dashboardCOStatusLbl->setText("Current Status: " + currentOrder.status);
+        ui->dashboardCOPurchasedLbl->setText("Items Purchased: " + QString::number(currentOrder.items.length()));
+        ui->dashboardPriceLbl->setText("Total: " + QLocale().toCurrencyString(currentOrder.totalCents/100.0));
+        ui->dashboardUsedPointsLbl->setText("Loyalty Points Used: " + QString::number(currentOrder.pointsUsed));
+        ui->dashboardEarnePointsLbl->setText("Loyalty Points Earned: " + QString::number(currentOrder.pointsEarned));
+        ui->dashboardUsedCreditLbl->setText("Account Credit Used: " + QLocale().toCurrencyString(currentOrder.creditUsedCents));
+        ui->dashboardCOStatusLbl->setText("Current Status: " + QString::number(currentOrder.pointsEarned));
+
+
+    } else {
+
+        ui->dashboardCurrentOrderLbl->setText("No current order");
+        ui->dashboardCurrOrderInfoFrame->setVisible(false);
 
     }
 
-    ui->dashboardUserLbl->setText(accTypeLbl);
+}
+
+void DashboardView::visualUpdateUserType(const QString &userType) {
+
+    // When the user logs in, we adjust the visual to reflect who is visiting
+    qDebug() << userType;
+
+    ui->dashboardUserLbl->setText(userType);
+
+    // Only kitchen staff can see the order queue
+    if (userType != "Kitchen Staff"){
+
+        ui->dashboardQueueBtn->setVisible(false);
+
+    } else {
+
+        ui->dashboardQueueBtn->setVisible(true);
+
+    }
+
+    if (userType != "Customer"){
+
+        ui->dashboardOrderBtn->setVisible(false);
+        ui->dashboardCustomerOnlyCont->setVisible(false);
+        ui->dashboardMainLbl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    } else {
+
+        ui->dashboardOrderBtn->setVisible(true);
+        ui->dashboardCustomerOnlyCont->setVisible(true);
+        ui->dashboardMainLbl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    }
+
+}
+
+void DashboardView::displayOrderHistory() {
 
     while (QLayoutItem *entryLayout = ui->orderHistoryEntriesCont->takeAt(0)){
 
@@ -78,7 +129,10 @@ void DashboardView::showEvent(QShowEvent *event) {
 
     }
 
-    for (int i = 0; i < 5; ++i){
+    // Now we generate entries for the current user's order history
+    QList<OrderSummary> orderHistory = controller->orderHistory();
+
+    for (OrderSummary currentHistOrder : orderHistory){
 
         // First we make a container for this entry
         QWidget *entryContainer = new QWidget;
@@ -87,15 +141,26 @@ void DashboardView::showEvent(QShowEvent *event) {
         QGridLayout *gridLayout = new QGridLayout(entryContainer);
 
         // Now we add labels about the given order's information
-        gridLayout->addWidget(new QLabel("Order ID: "), 0, 0);
-        gridLayout->addWidget(new QLabel("Status: "), 0, 1);
-        gridLayout->addWidget(new QLabel("Items Purchased: "), 0, 2);
-        gridLayout->addWidget(new QLabel("Total: "), 1, 0);
-        gridLayout->addWidget(new QLabel("Loyalty Points Used/Earned: "), 1, 1);
-        gridLayout->addWidget(new QLabel("Account Credit Received/Used: "), 1, 2);
+        gridLayout->addWidget(new QLabel("Order ID: " + QString::number(currentHistOrder.orderId)), 0, 0);
+        gridLayout->addWidget(new QLabel("Status: " + currentHistOrder.status), 0, 1);
+        gridLayout->addWidget(new QLabel("Items Purchased: " + QString::number(currentHistOrder.items.size())), 0, 2);
+        gridLayout->addWidget(new QLabel("Total: " + QLocale().toCurrencyString(currentHistOrder.totalCents/100.0)), 1, 0);
+        // If the loyalty points were used...
+        if(currentHistOrder.pointsUsed != 0){
+
+            gridLayout->addWidget(new QLabel("Loyalty Points Used: " + QString::number(currentHistOrder.pointsUsed)), 1, 1);
+
+        } else {
+
+            gridLayout->addWidget(new QLabel("Loyalty Points Earned: "+ QString::number(currentHistOrder.pointsEarned)), 1, 1);
+
+        }
+
+        gridLayout->addWidget(new QLabel("Account Credit Used: " + QLocale().toCurrencyString(currentHistOrder.creditUsedCents/100.0)), 1, 2);
 
         // Then we add this entry to the client's order history
         ui->orderHistoryEntriesCont->addWidget(entryContainer);
+
     }
 
 }
@@ -114,9 +179,9 @@ void DashboardView::orderQueueBtnClicked() {
 
 }
 
+void DashboardView::signoutBtnClicked() {
 
+    emit requestViewChange(ViewType::LoginView);
 
-//void DashboardView::signoutBtnClicked() {
-
-//}
+}
 

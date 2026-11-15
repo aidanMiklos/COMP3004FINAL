@@ -44,6 +44,8 @@ private:
 
     Ui::MenuView *ui;
 
+    void displayMenu();
+
 private slots:
 
     void addItemBtnClicked(const QString &menuItemName);

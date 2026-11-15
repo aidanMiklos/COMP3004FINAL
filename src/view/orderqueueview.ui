@@ -87,7 +87,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="dashboardUserLbl">
+       <widget class="QLabel" name="orderQueueUserLbl">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -200,7 +200,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="dashboardSignOutBtn">
+       <widget class="QPushButton" name="orderQueueSignOutBtn">
         <property name="text">
          <string>Sign Out</string>
         </property>

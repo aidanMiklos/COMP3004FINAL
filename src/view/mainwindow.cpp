@@ -20,6 +20,7 @@
 #include "orderqueueview.h"
 #include <QStackedWidget>
 #include "viewtype.h"
+#include "accountcontroller.h"
 
 MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
                        OrderController *orders, DashboardController *dashboard,
@@ -45,7 +46,7 @@ MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
     widgetStack->addWidget(orderQueueView);
     widgetStack->addWidget(menuView);
 
-    widgetStack->setCurrentWidget(dashboardView);
+    widgetStack->setCurrentWidget(loginView);
 
     // Connections
 
@@ -67,14 +68,17 @@ void MainWindow::handleViewSwap(ViewType requestedType)
 
         case ViewType::DashboardView:
             ui->stackedWidget->setCurrentWidget(dashboardView);
+            dashboardView->visualUpdateUserType(accountController->currentRole());
             break;
 
         case ViewType::LoginView:
+            accountController->logout();
             ui->stackedWidget->setCurrentWidget(loginView);
             break;
 
         case ViewType::MakeOrderView:
             ui->stackedWidget->setCurrentWidget(makeOrderView);
+            makeOrderView->visualUpdateUserType(accountController->currentRole());
             break;
 
         case ViewType::MenuView:
@@ -88,6 +92,7 @@ void MainWindow::handleViewSwap(ViewType requestedType)
 
         case ViewType::OrderQueueView:
             ui->stackedWidget->setCurrentWidget(orderQueueView);
+            orderQueueView->visualUpdateUserType(accountController->currentRole());
             break;
 
     }

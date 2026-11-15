@@ -36,11 +36,15 @@ class MakeOrderView : public QWidget
 public:
     explicit MakeOrderView(OrderController *controller, MenuController *menuController, QWidget *parent = nullptr);
 
-    void requestUsername();
+    void visualUpdateUserType(const QString &userType);
+
 
 signals:
     // Signal for MainWindow to request the view be swapped
     void requestViewChange(ViewType requestedView);
+
+protected:
+    void showEvent(QShowEvent *event) override;
 
 private:
     OrderController *controller;   // Figure 1: MakeOrderView -> OrderController
@@ -48,10 +52,13 @@ private:
 
     Ui::MakeOrderView *ui;
 
+    void updateCheckout();
+
 private slots:
     void custItemRequested(const QString &menuItemName);
     void checkoutBtnClicked();
     void dashboardBtnClicked();
+    void signoutBtnClicked();
 
 };
 

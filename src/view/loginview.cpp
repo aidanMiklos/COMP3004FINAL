@@ -10,6 +10,7 @@
 #include "loginview.h"
 #include "ui_loginview.h"
 #include "viewtype.h"
+#include "accountcontroller.h"
 
 LoginView::LoginView(AccountController *controller, QWidget *parent)
     : QWidget(parent), controller(controller), ui(new Ui::LoginView)
@@ -39,11 +40,14 @@ LoginView::LoginView(AccountController *controller, QWidget *parent)
 void LoginView::signinBtnClicked()
 {
 
+    QString username = ui->usernameInput->text();
+
     // When the sign in button is clicked, we ask the AccountController if the specified username exists
-    // For now, we simply just check against my name
-    if (ui->usernameInput->text() == "Henri"){
+    if (controller->identify(username)){
 
         emit requestViewChange(ViewType::DashboardView);
+        ui->usernameInput->setText("");
+        ui->loginWarningLbl->setText("");
 
     } else {
 

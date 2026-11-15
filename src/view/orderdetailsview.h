@@ -32,6 +32,10 @@ public:
 
     void requestedOrderId(int orderId);
 
+signals:
+
+    void signalOrderSetCompleted();
+
 private:
     KitchenController *controller;   // Figure 1: OrderDetailsView -> KitchenController
     int orderId;    // Used to store a given order's ID with the OrderDetailView. Prevents having to disconnect and reconnect the complete button

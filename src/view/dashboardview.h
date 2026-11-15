@@ -41,6 +41,8 @@ class DashboardView : public QWidget
 public:
     explicit DashboardView(DashboardController *controller, QWidget *parent = nullptr);
 
+    void visualUpdateUserType(const QString &userType);
+
 // Used to notify others of events. Primarily for talking to the MainWindow
 signals:
     // Signal for MainWindow to request the view be swapped
@@ -54,10 +56,14 @@ private:
 
     Ui::DashboardView *ui;
 
+    void displayOrderHistory();
+    void displayCurrentOrder();
+
 // Used to receive signals from this view's own widgets
 private slots:
     void createOrderBtnClicked();
     void orderQueueBtnClicked();
+    void signoutBtnClicked();
 };
 
 
