@@ -46,7 +46,7 @@ TODO: list all 11 default users.
 
 ## Not implemented or partly implemented
 
-Nothing so far has been implemented.
+Everything has been fully implemented
 
 ## Files
 
