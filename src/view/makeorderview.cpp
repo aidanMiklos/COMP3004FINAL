@@ -40,7 +40,15 @@ MakeOrderView::MakeOrderView(OrderController *controller, MenuController *menuCo
 
 void MakeOrderView::visualUpdateUserType(const QString &userType) {
 
-    ui->dashboardUserLbl_2->setText(userType);
+    if(userType == "System Administrator") {
+
+        ui->dashboardUserLbl_2->setText("System Admin");
+
+    } else {
+
+        ui->dashboardUserLbl_2->setText(userType);
+
+    }
 
 }
 

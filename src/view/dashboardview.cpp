@@ -69,12 +69,11 @@ void DashboardView::displayCurrentOrder() {
 
         ui->dashboardCOIDLbl->setText("Order ID: " + QString::number(currentOrder.orderId));
         ui->dashboardCOStatusLbl->setText("Current Status: " + currentOrder.status);
-        ui->dashboardCOPurchasedLbl->setText("Items Purchased: " + QString::number(currentOrder.items.length()));
+        ui->dashboardCOPurchasedLbl->setText("Items Purchased: " + currentOrder.items.join(", "));
         ui->dashboardPriceLbl->setText("Total: " + QLocale().toCurrencyString(currentOrder.totalCents/100.0));
         ui->dashboardUsedPointsLbl->setText("Loyalty Points Used: " + QString::number(currentOrder.pointsUsed));
         ui->dashboardEarnePointsLbl->setText("Loyalty Points Earned: " + QString::number(currentOrder.pointsEarned));
-        ui->dashboardUsedCreditLbl->setText("Account Credit Used: " + QLocale().toCurrencyString(currentOrder.creditUsedCents));
-        ui->dashboardCOStatusLbl->setText("Current Status: " + QString::number(currentOrder.pointsEarned));
+        ui->dashboardUsedCreditLbl->setText("Account Credit Used: " + QLocale().toCurrencyString(currentOrder.creditUsedCents/100.0));
 
 
     } else {
@@ -89,7 +88,15 @@ void DashboardView::displayCurrentOrder() {
 void DashboardView::visualUpdateUserType(const QString &userType) {
 
     // When the user logs in, we adjust the visual to reflect who is visiting
-    ui->dashboardUserLbl->setText(userType);
+    if(userType == "System Administrator") {
+
+        ui->dashboardUserLbl->setText("System Admin");
+
+    } else {
+
+        ui->dashboardUserLbl->setText(userType);
+
+    }
 
     // Only kitchen staff can see the order queue
     if (userType != "Kitchen Staff"){
@@ -165,6 +172,14 @@ void DashboardView::displayOrderHistory() {
 
         // Then we add this entry to the client's order history
         ui->orderHistoryEntriesCont->addWidget(entryContainer);
+
+        // To separate the entries, we add a little divider
+        QFrame *divider = new QFrame();
+        divider->setFrameShape(QFrame::NoFrame);
+        divider->setStyleSheet("background-color: rgb(222, 221, 218);");
+        divider->setFixedWidth(1);
+
+        ui->orderHistoryEntriesCont->addWidget(divider);
 
     }
 
