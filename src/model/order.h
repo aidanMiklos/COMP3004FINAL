@@ -29,6 +29,8 @@ public:
     QString customerUsername()const;
     void setCustomerUsername(const QString &username);
     bool calculatePayment(int points, int creditCents);
+    int maxRedeemablePoints() const;
+    int maxCreditCents(int points) const;
 private:
     int m_orderId;
     QVector<OrderItem> m_items;
