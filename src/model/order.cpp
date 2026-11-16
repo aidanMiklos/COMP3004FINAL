@@ -85,14 +85,19 @@ void Order::setCustomerUsername(const QString &username){
     m_customerUsername = username;
 }
 
-bool Order::calculatePayment(int points, int creditCents){
-    int maxPoints = (subtotalCents() / 2) / 100;
-    int pointsValue = points * 100;
+int Order::maxRedeemablePoints() const{
+    return (subtotalCents() / 2) / 100;
+}
 
-    if (points < 0 || points > maxPoints || creditCents < 0)
+int Order::maxCreditCents(int points) const{
+    return qMax(0, totalCents() - points * 100);
+}
+
+bool Order::calculatePayment(int points, int creditCents){
+    if (points < 0 || points > maxRedeemablePoints() || creditCents < 0)
         return false;
 
-    int remaining = totalCents() - pointsValue;
+    int remaining = maxCreditCents(points);
     if (creditCents > remaining)
         return false;
     m_pointsUsed = points;
