@@ -383,37 +383,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="makeOrderPointsInputLbl">
-          <property name="text">
-           <string>Loyalty Points to Use:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="makeOrderPointsInput">
-          <property name="maximum">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="makeOrderCreditInputLbl">
-          <property name="text">
-           <string>Account Credit to Use:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="makeOrderCreditInput">
-          <property name="prefix">
-           <string>$</string>
-          </property>
-          <property name="maximum">
-           <double>0.000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QLabel" name="makeOrderPointsUsedLbl">
           <property name="text">
            <string>Loyalty Points Used: </string>
@@ -444,13 +413,6 @@
          <widget class="QLabel" name="makeOrderTotalLbl">
           <property name="text">
            <string>Total: </string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="makeOrderAmountToPayLbl">
-          <property name="text">
-           <string>Amount to Pay:</string>
           </property>
          </widget>
         </item>
