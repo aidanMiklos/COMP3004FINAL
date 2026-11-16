@@ -66,6 +66,22 @@ int OrderController::availableCreditCents() const
     return customer ? customer->creditCents() : 0;
 }
 
+int OrderController::maxPointsAllowed() const
+{
+    const Customer *customer = currentCustomer();
+    if (!customer || !ownsDraft())
+        return 0;
+    return qMin(customer->loyaltyPoints(), draftOrder->maxRedeemablePoints());
+}
+
+int OrderController::maxCreditAllowedCents(int points) const
+{
+    const Customer *customer = currentCustomer();
+    if (!customer || !ownsDraft())
+        return 0;
+    return qMin(customer->creditCents(), draftOrder->maxCreditCents(points));
+}
+
 bool OrderController::startOrder()
 {
     if (!canPlaceOrder())
