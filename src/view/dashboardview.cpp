@@ -69,11 +69,11 @@ void DashboardView::displayCurrentOrder() {
 
         ui->dashboardCOIDLbl->setText("Order ID: " + QString::number(currentOrder.orderId));
         ui->dashboardCOStatusLbl->setText("Current Status: " + currentOrder.status);
-        ui->dashboardCOPurchasedLbl->setText("Items Purchased: " + QString::number(currentOrder.items.length()));
+        ui->dashboardCOPurchasedLbl->setText("Items Purchased: " + currentOrder.items.join(", "));
         ui->dashboardPriceLbl->setText("Total: " + QLocale().toCurrencyString(currentOrder.totalCents/100.0));
         ui->dashboardUsedPointsLbl->setText("Loyalty Points Used: " + QString::number(currentOrder.pointsUsed));
         ui->dashboardEarnePointsLbl->setText("Loyalty Points Earned: " + QString::number(currentOrder.pointsEarned));
-        ui->dashboardUsedCreditLbl->setText("Account Credit Used: " + QLocale().toCurrencyString(currentOrder.creditUsedCents));
+        ui->dashboardUsedCreditLbl->setText("Account Credit Used: " + QLocale().toCurrencyString(currentOrder.creditUsedCents/100.0));
 
 
     } else {

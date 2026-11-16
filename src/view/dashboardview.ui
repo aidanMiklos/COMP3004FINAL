@@ -399,67 +399,57 @@
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <widget class="QWidget" name="layoutWidget">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>709</width>
-               <height>42</height>
-              </rect>
-             </property>
-             <layout class="QGridLayout" name="dashboardCurrentOrderInfoGrid">
-              <item row="0" column="2">
-               <widget class="QLabel" name="dashboardCOPurchasedLbl">
-                <property name="text">
-                 <string>Items Purchased: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="3">
-               <widget class="QLabel" name="dashboardPriceLbl">
-                <property name="text">
-                 <string>Total:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLabel" name="dashboardEarnePointsLbl">
-                <property name="text">
-                 <string>Loyalty Points Earned:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="dashboardUsedPointsLbl">
-                <property name="text">
-                 <string>Loyalty Points Used: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="dashboardCOIDLbl">
-                <property name="text">
-                 <string>Order ID: 00001</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLabel" name="dashboardCOStatusLbl">
-                <property name="text">
-                 <string>Status: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QLabel" name="dashboardUsedCreditLbl">
-                <property name="text">
-                 <string>Account Credit Used:</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
+            <layout class="QGridLayout" name="dashboardCurrentOrderInfoGrid">
+             <item row="0" column="2">
+              <widget class="QLabel" name="dashboardCOPurchasedLbl">
+               <property name="text">
+                <string>Items Purchased: </string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="dashboardPriceLbl">
+               <property name="text">
+                <string>Total:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="dashboardEarnePointsLbl">
+               <property name="text">
+                <string>Loyalty Points Earned:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="dashboardUsedPointsLbl">
+               <property name="text">
+                <string>Loyalty Points Used: </string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="dashboardCOIDLbl">
+               <property name="text">
+                <string>Order ID: 00001</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="dashboardCOStatusLbl">
+               <property name="text">
+                <string>Status: </string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="dashboardUsedCreditLbl">
+               <property name="text">
+                <string>Account Credit Used:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
