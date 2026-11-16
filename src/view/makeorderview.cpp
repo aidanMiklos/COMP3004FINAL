@@ -32,6 +32,8 @@ MakeOrderView::MakeOrderView(OrderController *controller, MenuController *menuCo
     connect(menuView, &MenuView::addItem, this, &MakeOrderView::custItemRequested);
     // Connect the signout button with its function
     connect(ui->makeOrderSignOutBtn, &QPushButton::clicked, this, &MakeOrderView::signoutBtnClicked);
+    connect(ui->makeOrderPointsInput, QOverload<int>::of(&QSpinBox::valueChanged), this, &MakeOrderView::updateCheckout);
+    connect(ui->makeOrderCreditInput, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &MakeOrderView::updateCheckout);
 
 
 }
@@ -86,20 +88,29 @@ void MakeOrderView::custItemRequested(const QString &menuItemName) {
 void MakeOrderView::updateCheckout() {
 
     // We retrieve the current breakdown of the users current order from the controller
-    PriceBreakdown breakdown = controller->breakdown(controller->availablePoints(),controller->availableCreditCents());
+    const QSignalBlocker pointsBlocker(ui->makeOrderPointsInput);
+    const QSignalBlocker creditBlocker(ui->makeOrderCreditInput);
+
+    ui->makeOrderPointsInput->setMaximum(controller->maxPointsAllowed());
+    const int points = ui->makeOrderPointsInput->value();
+    ui->makeOrderCreditInput->setMaximum(controller->maxCreditAllowedCents(points) / 100.0);
+    const int creditCents = qRound(ui->makeOrderCreditInput->value() * 100);
+
+    PriceBreakdown breakdown = controller->breakdown(points, creditCents);
 
     ui->makeOrderSubTotalLbl->setText("Subtotal: " + QLocale().toCurrencyString(breakdown.subtotalCents/100.0));
     ui->makeOrderTaxLbl->setText("Tax: " + QLocale().toCurrencyString(breakdown.taxCents/100.0));
     ui->makeOrderPointsUsedLbl->setText("Loyalty Points Used: " + QString::number(breakdown.pointsUsed));
     ui->makeOrderCreditUsedLbl->setText("Account Credit Used: " + QLocale().toCurrencyString(breakdown.creditUsedCents/100.0));
     ui->makeOrderTotalLbl->setText("Total: " + QLocale().toCurrencyString(breakdown.totalCents/100.0));
+    ui->makeOrderAmountToPayLbl->setText("Amount to Pay: " + QLocale().toCurrencyString(breakdown.amountChargedCents/100.0));
 
 }
 
 void MakeOrderView::checkoutBtnClicked() {
 
     // Request username from mainwindow, submit information to controller
-    controller->submitOrder(controller->availablePoints(),controller->availableCreditCents());
+    controller->submitOrder(ui->makeOrderPointsInput->value(), qRound(ui->makeOrderCreditInput->value() * 100));
     updateCheckout();
 
 }
