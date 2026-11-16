@@ -53,8 +53,6 @@ public:
     bool canPlaceOrder() const;
     int availablePoints() const;
     int availableCreditCents() const;
-    int maxPointsAllowed() const;
-    int maxCreditAllowedCents(int points) const;
     bool startOrder();
     bool addItem(const QString &menuItemName, int quantity);
     void cancelOrder();
