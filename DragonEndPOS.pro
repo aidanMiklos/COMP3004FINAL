@@ -79,7 +79,8 @@ HEADERS += \
     src/view/makeorderview.h \
     src/view/menuview.h \
     src/view/orderdetailsview.h \
-    src/view/orderqueueview.h
+    src/view/orderqueueview.h \
+    src/view/viewtype.h
 
 FORMS += \
     src/view/makeorderview.ui \

@@ -19,6 +19,7 @@
 #define MAKEORDERVIEW_H
 
 #include <QWidget>
+#include "viewtype.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MakeOrderView; }
@@ -35,11 +36,30 @@ class MakeOrderView : public QWidget
 public:
     explicit MakeOrderView(OrderController *controller, MenuController *menuController, QWidget *parent = nullptr);
 
+    void visualUpdateUserType(const QString &userType);
+
+
+signals:
+    // Signal for MainWindow to request the view be swapped
+    void requestViewChange(ViewType requestedView);
+
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     OrderController *controller;   // Figure 1: MakeOrderView -> OrderController
     MenuView *menuView;       // Figure 1: MakeOrderView -> MenuView (embedded)
 
     Ui::MakeOrderView *ui;
+
+    void updateCheckout();
+
+private slots:
+    void custItemRequested(const QString &menuItemName);
+    void checkoutBtnClicked();
+    void dashboardBtnClicked();
+    void signoutBtnClicked();
+
 };
 
 #endif // MAKEORDERVIEW_H

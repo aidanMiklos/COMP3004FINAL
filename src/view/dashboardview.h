@@ -26,6 +26,8 @@
 
 #include <QWidget>
 
+#include "viewtype.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class DashboardView; }
 QT_END_NAMESPACE
@@ -39,10 +41,32 @@ class DashboardView : public QWidget
 public:
     explicit DashboardView(DashboardController *controller, QWidget *parent = nullptr);
 
+    void visualUpdateUserType(const QString &userType);
+
+// Used to notify others of events. Primarily for talking to the MainWindow
+signals:
+    // Signal for MainWindow to request the view be swapped
+    void requestViewChange(ViewType requestedView);
+
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     DashboardController *controller;   // Figure 1: DashboardView -> DashboardController
 
     Ui::DashboardView *ui;
+
+    void displayOrderHistory();
+    void displayCurrentOrder();
+    void displayClientInfo();
+
+// Used to receive signals from this view's own widgets
+private slots:
+    void createOrderBtnClicked();
+    void orderQueueBtnClicked();
+    void signoutBtnClicked();
+    void updateInfoBtnClicked();
 };
+
 
 #endif // DASHBOARDVIEW_H

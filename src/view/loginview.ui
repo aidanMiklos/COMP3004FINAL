@@ -178,7 +178,7 @@
    <item>
     <widget class="QLabel" name="loginWarningLbl">
      <property name="text">
-      <string>test</string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

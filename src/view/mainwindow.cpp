@@ -19,6 +19,8 @@
 #include "menuview.h"
 #include "orderqueueview.h"
 #include <QStackedWidget>
+#include "viewtype.h"
+#include "accountcontroller.h"
 
 MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
                        OrderController *orders, DashboardController *dashboard,
@@ -44,6 +46,64 @@ MainWindow::MainWindow(AccountController *accounts, MenuController *menu,
     widgetStack->addWidget(orderQueueView);
     widgetStack->addWidget(menuView);
 
-    widgetStack->setCurrentWidget(dashboardView);
+    widgetStack->setCurrentWidget(loginView);
+
+    // Connections
+
+    // View Change Connections
+    connect(loginView, &LoginView::requestViewChange, this, &MainWindow::handleViewSwap);
+    connect(dashboardView, &DashboardView::requestViewChange, this, &MainWindow::handleViewSwap);
+    connect(orderQueueView, &OrderQueueView::requestViewChange, this, &MainWindow::handleViewSwap);
+    connect(makeOrderView, &MakeOrderView::requestViewChange, this, &MainWindow::handleViewSwap);
+
+}
+
+// ----------------- PRIVATE SLOTS -----------------
+
+void MainWindow::handleViewSwap(ViewType requestedType)
+{
+    // We setCurrentWidget depending on the requested ViewType
+    switch(requestedType)
+    {
+
+        case ViewType::DashboardView:
+            ui->stackedWidget->setCurrentWidget(dashboardView);
+            dashboardView->visualUpdateUserType(accountController->currentRole());
+            break;
+
+        case ViewType::LoginView:
+            accountController->logout();
+            ui->stackedWidget->setCurrentWidget(loginView);
+            break;
+
+        case ViewType::MakeOrderView:
+            ui->stackedWidget->setCurrentWidget(makeOrderView);
+            makeOrderView->visualUpdateUserType(accountController->currentRole());
+            break;
+
+        case ViewType::MenuView:
+            ui->stackedWidget->setCurrentWidget(menuView);
+            break;
+
+            // Temp
+        case ViewType::OrderDetailsView:
+            ui->stackedWidget->setCurrentWidget(dashboardView);
+            break;
+
+        case ViewType::OrderQueueView:
+            ui->stackedWidget->setCurrentWidget(orderQueueView);
+            orderQueueView->visualUpdateUserType(accountController->currentRole());
+            break;
+
+    }
+}
+
+QString MainWindow::retrieveUsername(){
+
+    // Retrieve username from account controller, for now just return "Henri"
+
+    QString test = "Henri";
+
+    return test;
 
 }
