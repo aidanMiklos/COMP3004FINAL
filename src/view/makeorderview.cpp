@@ -95,6 +95,7 @@ void MakeOrderView::updateCheckout() {
     ui->makeOrderPointsUsedLbl->setText("Loyalty Points Used: " + QString::number(breakdown.pointsUsed));
     ui->makeOrderCreditUsedLbl->setText("Account Credit Used: " + QLocale().toCurrencyString(breakdown.creditUsedCents/100.0));
     ui->makeOrderTotalLbl->setText("Total: " + QLocale().toCurrencyString(breakdown.totalCents/100.0));
+    ui->makeOrderAmountToPayLbl->setText("Amount to Pay: " + QLocale().toCurrencyString(breakdown.amountChargedCents/100.0));
 
 }
 

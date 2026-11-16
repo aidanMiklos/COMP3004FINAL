@@ -448,6 +448,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="makeOrderAmountToPayLbl">
+          <property name="text">
+           <string>Amount to Pay:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="makeOrderCheckoutBtn">
           <property name="text">
            <string>Checkout</string>
