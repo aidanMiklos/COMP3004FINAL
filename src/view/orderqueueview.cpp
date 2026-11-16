@@ -28,7 +28,16 @@ OrderQueueView::OrderQueueView(KitchenController *controller, QWidget *parent)
 
 void OrderQueueView::visualUpdateUserType(const QString &userType) {
 
-    ui->orderQueueUserLbl->setText(userType);
+    // Text was just a bit big
+    if(userType == "System Administrator") {
+
+        ui->orderQueueUserLbl->setText("System Admin");
+
+    } else {
+
+        ui->orderQueueUserLbl->setText(userType);
+
+    }
 
 }
 
@@ -69,7 +78,7 @@ void OrderQueueView::resetVisuals() {
         QGridLayout *gridLayout = new QGridLayout(entryContainer);
 
         // Now we add labels about the given order's information
-        gridLayout->addWidget(new QLabel("Order ID: " + QString(currentEntry.orderId)), 0, 0);
+        gridLayout->addWidget(new QLabel("Order ID: " + QString::number(currentEntry.orderId)), 0, 0);
         gridLayout->addWidget(new QLabel("Customer Name: " + currentEntry.customerName), 0, 1);
         gridLayout->addWidget(new QLabel("Order Date and Time: " + currentEntry.placedAt), 0, 2);
 
